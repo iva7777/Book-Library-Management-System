@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 public class Reader {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

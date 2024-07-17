@@ -26,10 +26,6 @@ public class Book {
     private String description;
     private Boolean status;
 
-//    @ManyToOne
-//    @JoinColumn(name = "authorId")
-//    private Author author;
-
     @OneToMany(mappedBy = "book")
     private List<ReaderCard> readerCards;
 

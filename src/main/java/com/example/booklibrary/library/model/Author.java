@@ -18,9 +18,6 @@ public class Author {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
-//    @OneToMany(mappedBy = "author")
-//    private List<Book> books;
-
     @OneToMany(mappedBy = "author")
     private List<AuthorBook> authorBooks;
 
