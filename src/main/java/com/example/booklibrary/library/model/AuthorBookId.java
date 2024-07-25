@@ -1,13 +1,13 @@
 package com.example.booklibrary.library.model;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 
 @Embeddable
 public class AuthorBookId implements Serializable {
-
     @ManyToOne
     private Author authorId;
 
