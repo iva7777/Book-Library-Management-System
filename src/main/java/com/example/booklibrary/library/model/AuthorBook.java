@@ -12,12 +12,12 @@ public class AuthorBook {
 
     @ManyToOne
     @MapsId("authorId")
-    @JoinColumn(name = "authorId")
+    //@JoinColumn(name = "authorId")
     private Author author;
 
     @ManyToOne
     @MapsId("bookId")
-    @JoinColumn(name = "bookId")
+    //@JoinColumn(name = "bookId")
     private Book book;
     private Date creationDate;
 
