@@ -38,7 +38,7 @@ public class ReaderService {
             reader.setLastName(readerDetails.getLastName());
             reader.setPhone(readerDetails.getPhone());
             reader.setAddress(readerDetails.getAddress());
-            reader.setSchoolClass(readerDetails.getSchoolClass());
+            reader.setEmail(readerDetails.getEmail());
         } else {
             throw new RuntimeException("Reader with ID " + readerId + " not found.");
         }

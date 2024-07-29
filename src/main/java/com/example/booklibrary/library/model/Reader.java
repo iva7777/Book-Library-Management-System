@@ -7,22 +7,27 @@ import java.util.List;
 @Entity
 public class Reader {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String firstName;
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String lastName;
-    @Column(length = 15)
+    @Column(length = 15, nullable = false)
     private String phone;
-    @Column(length = 80)
+    @Column(length = 80, nullable = false)
     private String address;
-    @Column(length = 15)
-    private String schoolClass;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @OneToOne(mappedBy = "reader")
     private ReaderCard readerCard;
+
+
+    @OneToOne
+    @JoinColumn(name = "appUserId", referencedColumnName = "id")
+    private AppUser appUser;
 
     public Reader(){}
 
@@ -66,12 +71,12 @@ public class Reader {
         this.address = address;
     }
 
-    public String getSchoolClass() {
-        return schoolClass;
+    public String getEmail() {
+        return email;
     }
 
-    public void setSchoolClass(String schoolClass) {
-        this.schoolClass = schoolClass;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public ReaderCard getReaderCard() {
@@ -80,5 +85,13 @@ public class Reader {
 
     public void setReaderCard(ReaderCard readerCard) {
         this.readerCard = readerCard;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 }
