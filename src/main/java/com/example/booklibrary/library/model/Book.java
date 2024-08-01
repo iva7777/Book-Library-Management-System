@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(length = 30)
@@ -23,7 +23,10 @@ public class Book {
 
     @Column(columnDefinition = "TEXT")
     private String description;
-    private Boolean status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BookStatus status;
 
     @OneToMany(mappedBy = "book")
     private List<ReaderCard> readerCards;
@@ -89,15 +92,13 @@ public class Book {
         this.description = description;
     }
 
-    public Boolean getStatus() {
+    public BookStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(BookStatus status) {
         this.status = status;
     }
-
-
 
     public List<ReaderCard> getReaderCards() {
         return readerCards;
