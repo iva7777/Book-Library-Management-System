@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -30,16 +29,16 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public void updateBookStatus(int bookId, boolean newStatus){
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()){
-            Book book = optionalBook.get();
-            book.setStatus(newStatus);
-            bookRepository.save(book);
-        } else {
-            throw new RuntimeException("Book with ID " + bookId + " not found.");
-        }
-    }
+//    public void updateBookStatus(int bookId, boolean newStatus){
+//        Optional<Book> optionalBook = bookRepository.findById(bookId);
+//        if (optionalBook.isPresent()){
+//            Book book = optionalBook.get();
+//            book.setStatus(newStatus);
+//            bookRepository.save(book);
+//        } else {
+//            throw new RuntimeException("Book with ID " + bookId + " not found.");
+//        }
+//    }
 
     public void deleteBook(int id){
         bookRepository.deleteById(id);
