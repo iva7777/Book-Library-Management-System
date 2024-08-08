@@ -10,12 +10,12 @@ public class AuthorBook {
     @EmbeddedId
     private AuthorBookId id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @MapsId("authorId")
     //@JoinColumn(name = "authorId")
     private Author author;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @MapsId("bookId")
     //@JoinColumn(name = "bookId")
     private Book book;
