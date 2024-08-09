@@ -2,9 +2,11 @@ package com.example.booklibrary.library.mapper;
 
 import com.example.booklibrary.library.dto.ReaderCardDto;
 import com.example.booklibrary.library.model.ReaderCard;
+import org.mapstruct.Mapper;
 
 import java.util.Date;
 
+@Mapper(componentModel = "spring")
 public class ReaderCardMapper {
     public ReaderCardDto mapEntityToDto(ReaderCard readerCard){
         if (readerCard == null){

@@ -4,7 +4,9 @@ import com.example.booklibrary.library.dto.AppUserDto;
 import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.model.Role;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public class AppUserMapper {
     public AppUserDto mapEntityToDto(AppUser appUser){
         if (appUser == null){

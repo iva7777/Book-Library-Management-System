@@ -2,7 +2,9 @@ package com.example.booklibrary.library.mapper;
 
 import com.example.booklibrary.library.dto.AuthorDto;
 import com.example.booklibrary.library.model.Author;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public class AuthorMapper {
     public AuthorDto mapEntityToDto(Author author){
         if (author == null){

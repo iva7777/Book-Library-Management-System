@@ -3,7 +3,9 @@ package com.example.booklibrary.library.mapper;
 import com.example.booklibrary.library.dto.BookDto;
 import com.example.booklibrary.library.model.Book;
 import com.example.booklibrary.library.model.BookStatus;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public class BookMapper {
     public BookDto mapEntityToDto(Book book){
         if (book == null){
