@@ -15,7 +15,7 @@ public class ReaderCard {
     @JoinColumn(name = "readerId")
     private Reader reader;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rentBookId")
     private Book book;
 
