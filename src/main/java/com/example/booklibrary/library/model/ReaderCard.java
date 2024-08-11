@@ -11,7 +11,7 @@ public class ReaderCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "readerId")
     private Reader reader;
 
