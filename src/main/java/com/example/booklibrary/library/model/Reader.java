@@ -1,8 +1,6 @@
 package com.example.booklibrary.library.model;
 
-import com.example.booklibrary.library.model.ReaderCard;
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 public class Reader {
@@ -21,7 +19,7 @@ public class Reader {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToOne(mappedBy = "reader")
+    @OneToOne(mappedBy = "reader", cascade = CascadeType.ALL)
     private ReaderCard readerCard;
 
 

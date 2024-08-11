@@ -2,7 +2,6 @@ package com.example.booklibrary.library.mapper;
 
 import com.example.booklibrary.library.dto.AppUserDto;
 import com.example.booklibrary.library.model.AppUser;
-import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.model.Role;
 import org.mapstruct.Mapper;
 
@@ -17,15 +16,15 @@ public class AppUserMapper {
         String username = null;
         String password = null;
         Role role = null;
-        Reader reader = null;
+        //Reader reader = null;
 
         id = appUser.getId();
         username = appUser.getUsername();
         password = appUser.getPassword();
         role = appUser.getRole();
-        reader = appUser.getReader();
+        //reader = appUser.getReader();
 
-        return new AppUserDto(id, username, password, role, reader);
+        return new AppUserDto(id, username, password, role);
     }
 
     public AppUser mapDtoToEntity(AppUserDto appUserDto){
@@ -39,7 +38,7 @@ public class AppUserMapper {
         appUser.setUsername(appUserDto.username());
         appUser.setPassword(appUserDto.password());
         appUser.setRole(appUserDto.role());
-        appUser.setReader(appUserDto.reader());
+        //appUser.setReader(appUserDto.reader());
 
         return appUser;
     }
