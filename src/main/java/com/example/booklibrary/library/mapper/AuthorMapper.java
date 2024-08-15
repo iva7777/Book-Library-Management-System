@@ -14,12 +14,14 @@ public class AuthorMapper {
         Integer id = null;
         String firstName = null;
         String lastName = null;
+        String bio = null;
 
         id = author.getId();
         firstName = author.getFirstName();
         lastName = author.getLastName();
+        bio = author.getBio();
 
-        return new AuthorDto(id, firstName, lastName);
+        return new AuthorDto(id, firstName, lastName, bio);
     }
 
     public Author mapDtoToEntity(AuthorDto authorDto){
@@ -32,6 +34,7 @@ public class AuthorMapper {
         author.setId(authorDto.id());
         author.setFirstName(authorDto.firstName());
         author.setLastName(authorDto.lastName());
+        author.setBio(authorDto.bio());
 
         return author;
     }

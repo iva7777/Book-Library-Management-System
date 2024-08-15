@@ -50,7 +50,6 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new NoSuchElementException("Book with ID " + bookId + " not found."));
-        ;
 
         book.setStatus(newStatus);
         bookRepository.save(book);

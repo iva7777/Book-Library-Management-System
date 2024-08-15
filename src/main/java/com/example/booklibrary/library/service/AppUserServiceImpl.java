@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -50,17 +51,31 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public void updateUserInfo(int userId, AppUserDto userDetailsDto) {
-        AppUser appUser = appUserRepository
-                .findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User with ID " + userId + " not found."));
+//        AppUser appUser = appUserRepository
+//                .findById(userId)
+//                .orElseThrow(() -> new NoSuchElementException("User with ID " + userId + " not found."));
+//
+//        AppUser appUserDetails = appUserMapper.mapDtoToEntity(userDetailsDto);
+//
+//        appUser.setUsername(appUserDetails.getUsername());
+//        appUser.setPassword(appUserDetails.getPassword());
+//        appUser.setRole(appUserDetails.getRole());
+//
+//        appUserRepository.save(appUser);
 
-        AppUser appUserDetails = appUserMapper.mapDtoToEntity(userDetailsDto);
+        Optional<AppUser> existingUserOptional = appUserRepository.findById(userId);
+        if (existingUserOptional.isEmpty()) {
+            throw new NoSuchElementException("User with ID " + userId + "not found.");
+        }
+        AppUser existingUser = existingUserOptional.get();
 
-        appUser.setUsername(appUserDetails.getUsername());
-        appUser.setPassword(appUserDetails.getPassword());
-        appUser.setRole(appUserDetails.getRole());
+        existingUser.setUsername(userDetailsDto.username());
+        existingUser.setPassword(userDetailsDto.password());
+        existingUser.setRole(userDetailsDto.role());
 
-        appUserRepository.save(appUser);
+        AppUser updatedUser = appUserRepository.save(existingUser);
+
+        appUserMapper.mapEntityToDto(updatedUser);
     }
 
     @Override
