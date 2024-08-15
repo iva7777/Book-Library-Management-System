@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ReaderServiceImpl implements ReaderService {
@@ -46,19 +47,36 @@ public class ReaderServiceImpl implements ReaderService {
     }
 
     public void updateReaderInfo(int readerId, ReaderDto readerDetailsDto) {
-        Reader reader = readerRepository
-                .findById(readerId)
-                .orElseThrow(() -> new NoSuchElementException("Reader with ID " + readerId + " not found."));
+//        Reader reader = readerRepository
+//                .findById(readerId)
+//                .orElseThrow(() -> new NoSuchElementException("Reader with ID " + readerId + " not found."));
+//
+//        Reader readerDetails = readerMapper.mapDtoToEntity(readerDetailsDto);
+//
+//        reader.setFirstName(readerDetails.getFirstName());
+//        reader.setLastName(readerDetails.getLastName());
+//        reader.setPhone(readerDetails.getPhone());
+//        reader.setAddress(readerDetails.getAddress());
+//        reader.setEmail(readerDetails.getEmail());
+//
+//        readerRepository.save(reader);
 
-        Reader readerDetails = readerMapper.mapDtoToEntity(readerDetailsDto);
+        Optional<Reader> existingReaderOptional = readerRepository.findById(readerId);
+        if (existingReaderOptional.isEmpty()) {
+            throw new NoSuchElementException("Reader with ID " + readerId + "not found.");
+        }
+        Reader existingReader = existingReaderOptional.get();
 
-        reader.setFirstName(readerDetails.getFirstName());
-        reader.setLastName(readerDetails.getLastName());
-        reader.setPhone(readerDetails.getPhone());
-        reader.setAddress(readerDetails.getAddress());
-        reader.setEmail(readerDetails.getEmail());
 
-        readerRepository.save(reader);
+        existingReader.setFirstName(readerDetailsDto.firstName());
+        existingReader.setLastName(readerDetailsDto.lastName());
+        existingReader.setPhone(readerDetailsDto.phone());
+        existingReader.setAddress(readerDetailsDto.address());
+        existingReader.setEmail(readerDetailsDto.email());
+
+        Reader updatedReader = readerRepository.save(existingReader);
+
+        readerMapper.mapEntityToDto(updatedReader);
     }
 
     public void deleteReader(int id){
