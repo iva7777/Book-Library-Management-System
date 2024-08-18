@@ -63,7 +63,7 @@ public class ReaderServiceImpl implements ReaderService {
 
         Optional<Reader> existingReaderOptional = readerRepository.findById(readerId);
         if (existingReaderOptional.isEmpty()) {
-            throw new NoSuchElementException("Reader with ID " + readerId + "not found.");
+            throw new NoSuchElementException("Reader with ID " + readerId + " not found.");
         }
         Reader existingReader = existingReaderOptional.get();
 
