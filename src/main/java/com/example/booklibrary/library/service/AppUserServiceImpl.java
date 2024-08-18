@@ -65,7 +65,7 @@ public class AppUserServiceImpl implements AppUserService {
 
         Optional<AppUser> existingUserOptional = appUserRepository.findById(userId);
         if (existingUserOptional.isEmpty()) {
-            throw new NoSuchElementException("User with ID " + userId + "not found.");
+            throw new NoSuchElementException("User with ID " + userId + " not found.");
         }
         AppUser existingUser = existingUserOptional.get();
 

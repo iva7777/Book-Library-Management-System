@@ -35,7 +35,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDto getAuthorById(int id) {
         var author = authorRepository
                 .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + "not found."));
+                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found."));
 
         return authorMapper.mapEntityToDto(author);
     }
@@ -62,7 +62,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         Optional<Author> existingAuthorOptional = authorRepository.findById(authorId);
         if (existingAuthorOptional.isEmpty()) {
-            throw new NoSuchElementException("Author with ID " + authorId + "not found.");
+            throw new NoSuchElementException("Author with ID " + authorId + " not found.");
         }
         Author existingAuthor = existingAuthorOptional.get();
 
