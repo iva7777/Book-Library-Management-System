@@ -4,16 +4,16 @@ import com.example.booklibrary.library.dto.AuthorDto;
 import com.example.booklibrary.library.model.Author;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface AuthorService {
     List<AuthorDto> getAllAuthors();
 
-    AuthorDto getAuthorById(int id) throws NoSuchElementException;
+    Optional<AuthorDto> getAuthorById(int id);
 
     Author saveAuthor(AuthorDto authorDto);
 
-    void updateAuthorInfo(int authorId, AuthorDto authorDetailsDto) throws NoSuchElementException;
+    Optional<AuthorDto> updateAuthorInfo(int authorId, AuthorDto authorDetailsDto);
 
     void deleteAuthor(int id);
 

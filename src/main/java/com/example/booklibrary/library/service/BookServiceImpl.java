@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -32,12 +33,9 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-    public BookDto getBookById(int id) {
-        Book book = bookRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Book with ID " + id + " not found."));
-
-        return bookMapper.mapEntityToDto(book);
+    public Optional<BookDto> getBookById(int id) {
+        return bookRepository.findById(id)
+                .map(bookMapper::mapEntityToDto);
     }
 
     public Book saveBook(BookDto bookDto) {
@@ -46,13 +44,13 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
-    public void updateBookStatus(int bookId, BookStatus newStatus) {
-        Book book = bookRepository
-                .findById(bookId)
-                .orElseThrow(() -> new NoSuchElementException("Book with ID " + bookId + " not found."));
-
-        book.setStatus(newStatus);
-        bookRepository.save(book);
+    public Optional<BookDto> updateBookStatus(int bookId, BookStatus newStatus) {
+        return bookRepository.findById(bookId)
+                .map(book -> {
+                    book.setStatus(newStatus);
+                    Book updatedBook = bookRepository.save(book);
+                    return bookMapper.mapEntityToDto(updatedBook);
+                });
     }
 
     public void deleteBook(int id){

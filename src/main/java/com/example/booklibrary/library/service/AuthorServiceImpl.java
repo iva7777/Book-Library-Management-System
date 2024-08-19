@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -32,12 +31,9 @@ public class AuthorServiceImpl implements AuthorService {
                 .toList();
     }
 
-    public AuthorDto getAuthorById(int id) {
-        var author = authorRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found."));
-
-        return authorMapper.mapEntityToDto(author);
+    public Optional<AuthorDto> getAuthorById(int id) {
+        return authorRepository.findById(id)
+                .map(authorMapper::mapEntityToDto);
     }
 
     public Author saveAuthor(AuthorDto authorDto) {
@@ -46,34 +42,14 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.save(author);
     }
 
-    public void updateAuthorInfo(int authorId, AuthorDto authorDetailsDto) {
-//        Author author = authorRepository
-//                .findById(authorId)
-//                .orElseThrow(() -> new NoSuchElementException("Author with ID " + authorId + "not found."));
-
-//        Author authorDetails = authorMapper.mapDtoToEntity(authorDetailsDto);
-//
-//        author.setFirstName(authorDetails.getFirstName());
-//        author.setLastName(authorDetails.getLastName());
-//        author.setBio(authorDetails.getBio());
-//        author.setAuthorBooks(authorDetails.getAuthorBooks());
-//
-//        authorRepository.save(author);
-
-        Optional<Author> existingAuthorOptional = authorRepository.findById(authorId);
-        if (existingAuthorOptional.isEmpty()) {
-            throw new NoSuchElementException("Author with ID " + authorId + " not found.");
-        }
-        Author existingAuthor = existingAuthorOptional.get();
-
-
-        existingAuthor.setFirstName(authorDetailsDto.firstName());
-        existingAuthor.setLastName(authorDetailsDto.lastName());
-        existingAuthor.setBio(authorDetailsDto.bio());
-
-        Author updatedAuthor = authorRepository.save(existingAuthor);
-
-        authorMapper.mapEntityToDto(updatedAuthor);
+    public Optional<AuthorDto> updateAuthorInfo(int authorId, AuthorDto authorDetailsDto) {
+        return authorRepository.findById(authorId).map(existingAuthor -> {
+            existingAuthor.setFirstName(authorDetailsDto.firstName());
+            existingAuthor.setLastName(authorDetailsDto.lastName());
+            existingAuthor.setBio(authorDetailsDto.bio());
+            Author updatedAuthor = authorRepository.save(existingAuthor);
+            return authorMapper.mapEntityToDto(updatedAuthor);
+        });
     }
 
     public void deleteAuthor(int id){

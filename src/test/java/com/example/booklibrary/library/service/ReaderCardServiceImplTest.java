@@ -69,8 +69,10 @@ class ReaderCardServiceImplTest {
     void shouldGetReaderCardById() {
         when(readerCardRepository.findById(1)).thenReturn(Optional.of(readerCard));
 
-        ReaderCardDto newDto = readerCardService.getReaderCardById(1);
+        Optional<ReaderCardDto> newDtoOptional = readerCardService.getReaderCardById(1);
 
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        ReaderCardDto newDto = newDtoOptional.get();
         Assertions.assertEquals(readerCardDto, newDto);
         verify(readerCardRepository).findById(1);
     }
@@ -79,11 +81,11 @@ class ReaderCardServiceImplTest {
     void shouldNotGetReaderCardById() {
         when(readerCardRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerCardService.getReaderCardById(1);
-        });
+        Optional<ReaderCardDto> newDtoOptional = readerCardService.getReaderCardById(1);
 
-        Assertions.assertEquals("Reader card with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+
+        verify(readerCardRepository).findById(1);
     }
 
     @Test
@@ -91,8 +93,11 @@ class ReaderCardServiceImplTest {
         when(readerCardRepository.findById(1)).thenReturn(Optional.of(readerCard));
         when(readerCardRepository.save(readerCard)).thenReturn(readerCard);
 
-        readerCardService.updateReaderCard(1, readerCardDto);
+        Optional<ReaderCardDto> updatedReaderCardOptional = readerCardService.updateReaderCard(1, readerCardDto);
 
+        Assertions.assertTrue(updatedReaderCardOptional.isPresent());
+        ReaderCardDto updatedReaderCard = updatedReaderCardOptional.get();
+        Assertions.assertEquals(readerCardDto, updatedReaderCard);
         verify(readerCardRepository).findById(1);
         verify(readerCardRepository).save(readerCard);
     }
@@ -101,11 +106,10 @@ class ReaderCardServiceImplTest {
     void shouldNotUpdateReaderCard() {
         when(readerCardRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerCardService.updateReaderCard(1, readerCardDto);
-        });
+        Optional<ReaderCardDto> updatedReaderCardOptional = readerCardService.updateReaderCard(1, readerCardDto);
 
-        Assertions.assertEquals("Reader card with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(updatedReaderCardOptional.isEmpty());
+        verify(readerCardRepository).findById(1);
     }
 
     @Test

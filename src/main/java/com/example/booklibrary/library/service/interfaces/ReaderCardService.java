@@ -4,16 +4,16 @@ import com.example.booklibrary.library.dto.ReaderCardDto;
 import com.example.booklibrary.library.model.ReaderCard;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface ReaderCardService {
     List<ReaderCardDto> getAllReaderCards();
 
-    ReaderCardDto getReaderCardById(int id) throws NoSuchElementException;
+    Optional<ReaderCardDto> getReaderCardById(int id);
 
     ReaderCard saveReaderCard(ReaderCardDto readerCardDto);
 
-    void updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto) throws NoSuchElementException;
+    Optional<ReaderCardDto> updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto);
 
     void deleteReaderCard(int id);
 }
