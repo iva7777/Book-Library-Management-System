@@ -5,18 +5,19 @@ import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Role;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface AppUserService {
     List<AppUserDto> getAllUsers();
 
-    AppUserDto getUserById(int id) throws NoSuchElementException;
+    Optional<AppUserDto> getUserById(int id);
 
     AppUser saveUser(AppUserDto appUserDto);
 
-    void updateUserInfo(int userId, AppUserDto userDetailsDto) throws NoSuchElementException;
+    Optional<AppUserDto> updateUserInfo(int userId, AppUserDto userDetailsDto);
 
     void deleteUser(int id);
-    AppUserDto searchUserByUsername(String username);
+
+    Optional<AppUserDto> searchUserByUsername(String username);
     List<AppUserDto> searchUsersByRole(Role role);
 }

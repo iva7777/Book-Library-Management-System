@@ -5,16 +5,16 @@ import com.example.booklibrary.library.model.Book;
 import com.example.booklibrary.library.model.BookStatus;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface BookService {
     List<BookDto> getAllBooks();
 
-    BookDto getBookById(int id) throws NoSuchElementException;
+    Optional<BookDto> getBookById(int id);
 
     Book saveBook(BookDto bookDto);
 
-    void updateBookStatus(int bookId, BookStatus newStatus) throws NoSuchElementException;
+    Optional<BookDto> updateBookStatus(int bookId, BookStatus newStatus);
 
     void deleteBook(int id);
 

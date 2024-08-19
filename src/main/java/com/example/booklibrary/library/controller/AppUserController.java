@@ -5,12 +5,14 @@ import com.example.booklibrary.library.dto.AppUserDto;
 import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Role;
 import com.example.booklibrary.library.service.interfaces.AppUserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -28,41 +30,39 @@ public class AppUserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AppUserDto> getAuthorById(@PathVariable int id) {
-        try {
-            AppUserDto user = appUserService.getUserById(id);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<AppUserDto> getUserById(@PathVariable int id) {
+        Optional<AppUserDto> userOptional = appUserService.getUserById(id);
+
+        return userOptional.map(ResponseEntity::ok)
+                .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
     }
 
     @GetMapping("/searchByUsername/{username}")
-    public ResponseEntity<AppUserDto> searchUsersByUsername(@PathVariable String username) {
-        AppUserDto user = appUserService.searchUserByUsername(username);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<AppUserDto> searchUsersByUsername(@Valid @PathVariable String username) {
+        Optional<AppUserDto> userOptional = appUserService.searchUserByUsername(username);
+
+        return userOptional.map(ResponseEntity::ok)
+                .orElseThrow(() -> new NoSuchElementException("User with username " + username + " not found"));
     }
 
     @GetMapping("/searchByRole/{role}")
-    public ResponseEntity<List<AppUserDto>> searchUsersByRole(@PathVariable Role role) {
+    public ResponseEntity<List<AppUserDto>> searchUsersByRole(@Valid @PathVariable Role role) {
         List<AppUserDto> users = appUserService.searchUsersByRole(role);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<AppUser> saveAuthor(@RequestBody AppUserDto appUserDto) {
+    public ResponseEntity<AppUser> saveAuthor(@Valid @RequestBody AppUserDto appUserDto) {
         AppUser appUser = appUserService.saveUser(appUserDto);
         return new ResponseEntity<>(appUser, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody AppUserDto appUserDto) {
-        try {
-            appUserService.updateUserInfo(id, appUserDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<AppUserDto> updateUser(@PathVariable int id, @Valid @RequestBody AppUserDto appUserDto) {
+        Optional<AppUserDto> userOptional = appUserService.updateUserInfo(id, appUserDto);
+
+        return userOptional.map(ResponseEntity::ok)
+                .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
     }
 
     @DeleteMapping("{id}")

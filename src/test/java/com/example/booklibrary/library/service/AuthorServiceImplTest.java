@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -66,8 +65,10 @@ class AuthorServiceImplTest {
     void shouldGetAuthorById() {
         when(authorRepository.findById(1)).thenReturn(Optional.of(author));
 
-        AuthorDto newDto = authorService.getAuthorById(1);
+        Optional<AuthorDto> newDtoOptional = authorService.getAuthorById(1);
 
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        AuthorDto newDto = newDtoOptional.get();
         Assertions.assertEquals(authorDto, newDto);
         verify(authorRepository).findById(1);
     }
@@ -76,11 +77,11 @@ class AuthorServiceImplTest {
     void shouldNotGetAuthorById() {
         when(authorRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            authorService.getAuthorById(1);
-        });
+        Optional<AuthorDto> newDtoOptional = authorService.getAuthorById(1);
 
-        Assertions.assertEquals("Author with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+
+        verify(authorRepository).findById(1);
     }
 
     @Test
@@ -88,8 +89,11 @@ class AuthorServiceImplTest {
         when(authorRepository.findById(1)).thenReturn(Optional.of(author));
         when(authorRepository.save(author)).thenReturn(author);
 
-        authorService.updateAuthorInfo(1, authorDto);
+        Optional<AuthorDto> updatedAuthorOptional = authorService.updateAuthorInfo(1, authorDto);
 
+        Assertions.assertTrue(updatedAuthorOptional.isPresent());
+        AuthorDto updatedAuthor = updatedAuthorOptional.get();
+        Assertions.assertEquals(authorDto, updatedAuthor);
         verify(authorRepository).findById(1);
         verify(authorRepository).save(author);
     }
@@ -98,11 +102,10 @@ class AuthorServiceImplTest {
     void shouldNotUpdateAuthorInfo() {
         when(authorRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            authorService.updateAuthorInfo(1, authorDto);
-        });
+        Optional<AuthorDto> updatedAuthorOptional = authorService.updateAuthorInfo(1, authorDto);
 
-        Assertions.assertEquals("Author with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(updatedAuthorOptional.isEmpty());
+        verify(authorRepository).findById(1);
     }
 
 

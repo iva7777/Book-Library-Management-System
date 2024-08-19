@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ReaderCardServiceImpl implements ReaderCardService {
@@ -31,12 +31,9 @@ public class ReaderCardServiceImpl implements ReaderCardService {
                 .toList();
     }
 
-    public ReaderCardDto getReaderCardById(int id) {
-        ReaderCard readerCard = readerCardRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Reader card with ID " + id + " not found."));
-
-        return readerCardMapper.mapEntityToDto(readerCard);
+    public Optional<ReaderCardDto> getReaderCardById(int id) {
+        return readerCardRepository.findById(id)
+                .map(readerCardMapper::mapEntityToDto);
     }
 
     public ReaderCard saveReaderCard(ReaderCardDto readerCardDto) {
@@ -45,10 +42,14 @@ public class ReaderCardServiceImpl implements ReaderCardService {
         return readerCardRepository.save(readerCard);
     }
 
-    public void updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto) {
-        ReaderCard readerCard = readerCardRepository
-                .findById(readerCardId)
-                .orElseThrow(() -> new NoSuchElementException("Reader card with ID " + readerCardId + " not found."));
+    public Optional<ReaderCardDto> updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto) {
+        Optional<ReaderCard> optionalReaderCard = readerCardRepository.findById(readerCardId);
+
+        if (optionalReaderCard.isEmpty()) {
+            return Optional.empty();
+        }
+        ReaderCard readerCard = optionalReaderCard.get();
+
 
         ReaderCard readerCardDetails = readerCardMapper.mapDtoToEntity(readerCardDetailsDto);
 
@@ -58,6 +59,12 @@ public class ReaderCardServiceImpl implements ReaderCardService {
         readerCard.setReturnDate(readerCardDetails.getReturnDate());
 
         readerCardRepository.save(readerCard);
+
+
+        ReaderCardDto updatedReaderCardDto = readerCardMapper.mapEntityToDto(readerCard);
+
+
+        return Optional.of(updatedReaderCardDto);
     }
 
     public void deleteReaderCard(int id){
