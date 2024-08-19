@@ -19,8 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -75,8 +74,10 @@ class BookServiceImplTest {
     void shouldGetBookById() {
         when(bookRepository.findById(1)).thenReturn(Optional.of(book));
 
-        BookDto newDto = bookService.getBookById(1);
+        Optional<BookDto> newDtoOptional = bookService.getBookById(1);
 
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        BookDto newDto = newDtoOptional.get();
         Assertions.assertEquals(bookDto, newDto);
         verify(bookRepository).findById(1);
     }
@@ -85,25 +86,27 @@ class BookServiceImplTest {
     void shouldNotGetBookById() {
         when(bookRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            bookService.getBookById(1);
-        });
+        Optional<BookDto> newDtoOptional = bookService.getBookById(1);
 
-        Assertions.assertEquals("Book with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+
+        verify(bookRepository).findById(1);
     }
 
     @Test
     void shouldUpdateBookStatus() {
         BookStatus newStatus = BookStatus.available;
-        Book book = new Book();
+        book = new Book();
         book.setId(1);
         book.setStatus(BookStatus.borrowed);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(book));
+        when(bookRepository.save(book)).thenReturn(book);
 
-        bookService.updateBookStatus(1, newStatus);
+        Optional<BookDto> updatedBookOptional = bookService.updateBookStatus(1, newStatus);
 
-        Assertions.assertEquals(newStatus, book.getStatus());
+        Assertions.assertTrue(updatedBookOptional.isPresent());
+        Assertions.assertEquals(newStatus, updatedBookOptional.get().status());
         verify(bookRepository).save(book);
     }
 
@@ -113,11 +116,11 @@ class BookServiceImplTest {
 
         when(bookRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            bookService.updateBookStatus(1, newStatus);
-        });
+        Optional<BookDto> updatedBookOptional = bookService.updateBookStatus(1, newStatus);
 
-        Assertions.assertEquals("Book with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(updatedBookOptional.isEmpty());
+        verify(bookRepository).findById(1);
+        verify(bookRepository, never()).save(any(Book.class));
     }
 
     @Test
@@ -147,20 +150,6 @@ class BookServiceImplTest {
 
         Assertions.assertEquals(0, books.size());
     }
-
-//    @Test
-//    void shouldSearchBooksByAuthorName() {
-////        String bookTitle = "test";
-//        String authorName = "John Doe";
-//
-//        when(bookRepository.findByAuthorNameContaining(authorName)).thenReturn(new ArrayList<>(List.of(book)));
-//
-//        List<BookDto> books = bookService.searchBooksByAuthorName(authorName);
-//
-//        Assertions.assertEquals(1, books.size());
-//        //continue
-//
-//    }
 
     @Test
     void shouldSearchBooksByGenre() {

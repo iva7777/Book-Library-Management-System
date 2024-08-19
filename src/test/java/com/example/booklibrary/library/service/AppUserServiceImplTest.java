@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -67,8 +66,10 @@ class AppUserServiceImplTest {
     void shouldGetUserById() {
         when(appUserRepository.findById(1)).thenReturn(Optional.of(appUser));
 
-        AppUserDto newDto = appUserService.getUserById(1);
+        Optional<AppUserDto> newDtoOptional = appUserService.getUserById(1);
 
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        AppUserDto newDto = newDtoOptional.get();
         Assertions.assertEquals(appUserDto, newDto);
         verify(appUserRepository).findById(1);
     }
@@ -77,11 +78,10 @@ class AppUserServiceImplTest {
     void shouldNotGetUserById() {
         when(appUserRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            appUserService.getUserById(1);
-        });
+        Optional<AppUserDto> newDtoOptional = appUserService.getUserById(1);
 
-        Assertions.assertEquals("User with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+        verify(appUserRepository).findById(1);
     }
 
     @Test
@@ -89,8 +89,11 @@ class AppUserServiceImplTest {
         when(appUserRepository.findById(1)).thenReturn(Optional.of(appUser));
         when(appUserRepository.save(appUser)).thenReturn(appUser);
 
-        appUserService.updateUserInfo(1, appUserDto);
+        Optional<AppUserDto> updatedUserOptional = appUserService.updateUserInfo(1, appUserDto);
 
+        Assertions.assertTrue(updatedUserOptional.isPresent());
+        AppUserDto updatedUser = updatedUserOptional.get();
+        Assertions.assertEquals(appUserDto, updatedUser);
         verify(appUserRepository).findById(1);
         verify(appUserRepository).save(appUser);
     }
@@ -99,11 +102,10 @@ class AppUserServiceImplTest {
     void shouldNotUpdateUserInfo() {
         when(appUserRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            appUserService.updateUserInfo(1, appUserDto);
-        });
+        Optional<AppUserDto> updatedUserOptional = appUserService.updateUserInfo(1, appUserDto);
 
-        Assertions.assertEquals("User with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(updatedUserOptional.isEmpty());
+        verify(appUserRepository).findById(1);
     }
 
     @Test
@@ -116,20 +118,12 @@ class AppUserServiceImplTest {
     @Test
     void shouldSearchUserByUsername() {
         String username = "johndoe";
-        String password = "John";
-
-        AppUser appUser = new AppUser();
-        appUser.setId(1);
-        appUser.setUsername(username);
-        appUser.setPassword(password);
-        appUser.setRole(Role.librarian);
-        AppUserDto appUserDto = new AppUserDto(1, "johndoe", "John", Role.librarian);
-
         when(appUserRepository.findByUsername(username)).thenReturn(Optional.of(appUser));
 
-        AppUserDto newDto = appUserService.searchUserByUsername(username);
+        Optional<AppUserDto> newDtoOptional = appUserService.searchUserByUsername(username);
 
-        Assertions.assertNotNull(newDto);
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        AppUserDto newDto = newDtoOptional.get();
         Assertions.assertEquals(appUserDto, newDto);
         verify(appUserRepository).findByUsername(username);
     }
@@ -137,15 +131,13 @@ class AppUserServiceImplTest {
     @Test
     void shouldSearchUserByUsernameAndReturnOptional() {
         String username = "nonexistentuser";
-
         when(appUserRepository.findByUsername(username)).thenReturn(Optional.empty());
 
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            appUserService.searchUserByUsername(username);
-        });
+        Optional<AppUserDto> newDtoOptional = appUserService.searchUserByUsername(username);
 
-        Assertions.assertEquals("User with username " + username + " not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+        verify(appUserRepository).findByUsername(username);
     }
 
     @Test

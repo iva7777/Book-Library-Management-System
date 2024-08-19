@@ -96,8 +96,10 @@ class ReaderServiceImplTest {
     void shouldGetReaderById() {
         when(readerRepository.findById(1)).thenReturn(Optional.of(reader));
 
-        ReaderDto newDto = readerService.getReaderById(1);
+        Optional<ReaderDto> newDtoOptional = readerService.getReaderById(1);
 
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        ReaderDto newDto = newDtoOptional.get();
         Assertions.assertEquals(readerDto, newDto);
         verify(readerRepository).findById(1);
     }
@@ -106,11 +108,11 @@ class ReaderServiceImplTest {
     void shouldNotGetReaderById() {
         when(readerRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerService.getReaderById(1);
-        });
+        Optional<ReaderDto> newDtoOptional = readerService.getReaderById(1);
 
-        Assertions.assertEquals("Reader with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+
+        verify(readerRepository).findById(1);
     }
 
     @Test
@@ -118,8 +120,11 @@ class ReaderServiceImplTest {
         when(readerRepository.findById(1)).thenReturn(Optional.of(reader));
         when(readerRepository.save(reader)).thenReturn(reader);
 
-        readerService.updateReaderInfo(1, readerDto);
+        Optional<ReaderDto> updatedReaderOptional = readerService.updateReaderInfo(1, readerDto);
 
+        Assertions.assertTrue(updatedReaderOptional.isPresent());
+        ReaderDto updatedReader = updatedReaderOptional.get();
+        Assertions.assertEquals(readerDto, updatedReader);
         verify(readerRepository).findById(1);
         verify(readerRepository).save(reader);
     }
@@ -128,11 +133,10 @@ class ReaderServiceImplTest {
     void shouldNotUpdateReaderInfo() {
         when(readerRepository.findById(1)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerService.updateReaderInfo(1, readerDto);
-        });
+        Optional<ReaderDto> updatedReaderOptional = readerService.updateReaderInfo(1, readerDto);
 
-        Assertions.assertEquals("Reader with ID 1 not found.", exception.getMessage());
+        Assertions.assertTrue(updatedReaderOptional.isEmpty());
+        verify(readerRepository).findById(1);
     }
 
     @Test
@@ -170,9 +174,11 @@ class ReaderServiceImplTest {
 
         when(readerRepository.findReaderByPhone(phone)).thenReturn(Optional.of(reader));
 
-        readerDto = readerService.searchReaderByPhoneNumber(phone);
+        Optional<ReaderDto> newDtoOptional = readerService.searchReaderByPhoneNumber(phone);
 
-        Assertions.assertNotNull(readerDto);
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        ReaderDto newDto = newDtoOptional.get();
+        Assertions.assertEquals(readerDto, newDto);
         verify(readerRepository).findReaderByPhone(phone);
     }
 
@@ -182,11 +188,10 @@ class ReaderServiceImplTest {
 
         when(readerRepository.findReaderByPhone(phone)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerService.searchReaderByPhoneNumber(phone);
-        });
+        Optional<ReaderDto> newDtoOptional = readerService.searchReaderByPhoneNumber(phone);
 
-        Assertions.assertEquals("Reader with phone " + phone + " not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+        verify(readerRepository).findReaderByPhone(phone);
     }
 
     @Test
@@ -195,9 +200,11 @@ class ReaderServiceImplTest {
 
         when(readerRepository.findReaderByEmail(email)).thenReturn(Optional.of(reader));
 
-        readerDto = readerService.searchReaderByEmail(email);
+        Optional<ReaderDto> newDtoOptional = readerService.searchReaderByEmail(email);
 
-        Assertions.assertNotNull(readerDto);
+        Assertions.assertTrue(newDtoOptional.isPresent());
+        ReaderDto newDto = newDtoOptional.get();
+        Assertions.assertEquals(readerDto, newDto);
         verify(readerRepository).findReaderByEmail(email);
     }
 
@@ -207,10 +214,9 @@ class ReaderServiceImplTest {
 
         when(readerRepository.findReaderByEmail(email)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            readerService.searchReaderByEmail(email);
-        });
+        Optional<ReaderDto> newDtoOptional = readerService.searchReaderByEmail(email);
 
-        Assertions.assertEquals("Reader with email " + email + " not found.", exception.getMessage());
+        Assertions.assertTrue(newDtoOptional.isEmpty());
+        verify(readerRepository).findReaderByEmail(email);
     }
 }

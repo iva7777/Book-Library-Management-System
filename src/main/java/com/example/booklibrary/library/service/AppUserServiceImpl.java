@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -34,12 +33,9 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserDto getUserById(int id) {
-        AppUser appUser = appUserRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found."));
-
-        return appUserMapper.mapEntityToDto(appUser);
+    public Optional<AppUserDto> getUserById(int id) {
+        return appUserRepository.findById(id)
+                .map(appUserMapper::mapEntityToDto);
     }
 
     @Override
@@ -50,32 +46,14 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public void updateUserInfo(int userId, AppUserDto userDetailsDto) {
-//        AppUser appUser = appUserRepository
-//                .findById(userId)
-//                .orElseThrow(() -> new NoSuchElementException("User with ID " + userId + " not found."));
-//
-//        AppUser appUserDetails = appUserMapper.mapDtoToEntity(userDetailsDto);
-//
-//        appUser.setUsername(appUserDetails.getUsername());
-//        appUser.setPassword(appUserDetails.getPassword());
-//        appUser.setRole(appUserDetails.getRole());
-//
-//        appUserRepository.save(appUser);
-
-        Optional<AppUser> existingUserOptional = appUserRepository.findById(userId);
-        if (existingUserOptional.isEmpty()) {
-            throw new NoSuchElementException("User with ID " + userId + " not found.");
-        }
-        AppUser existingUser = existingUserOptional.get();
-
-        existingUser.setUsername(userDetailsDto.username());
-        existingUser.setPassword(userDetailsDto.password());
-        existingUser.setRole(userDetailsDto.role());
-
-        AppUser updatedUser = appUserRepository.save(existingUser);
-
-        appUserMapper.mapEntityToDto(updatedUser);
+    public Optional<AppUserDto> updateUserInfo(int userId, AppUserDto userDetailsDto) {
+        return appUserRepository.findById(userId).map(existingUser -> {
+            existingUser.setUsername(userDetailsDto.username());
+            existingUser.setPassword(userDetailsDto.password());
+            existingUser.setRole(userDetailsDto.role());
+            AppUser updatedUser = appUserRepository.save(existingUser);
+            return appUserMapper.mapEntityToDto(updatedUser);
+        });
     }
 
     @Override
@@ -84,12 +62,9 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserDto searchUserByUsername(String username) {
-        AppUser appUser = appUserRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new NoSuchElementException("User with username " + username + " not found."));
-
-        return appUserMapper.mapEntityToDto(appUser);
+    public Optional<AppUserDto> searchUserByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+                .map(appUserMapper::mapEntityToDto);
     }
 
     @Override

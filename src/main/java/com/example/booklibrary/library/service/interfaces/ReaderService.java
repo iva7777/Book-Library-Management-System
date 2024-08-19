@@ -4,22 +4,22 @@ import com.example.booklibrary.library.dto.ReaderDto;
 import com.example.booklibrary.library.model.Reader;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface ReaderService {
     List<ReaderDto> getAllReaders();
 
-    ReaderDto getReaderById(int id) throws NoSuchElementException;
+    Optional<ReaderDto> getReaderById(int id);
 
     Reader saveReader(ReaderDto readerDto);
 
-    void updateReaderInfo(int readerId, ReaderDto readerDetailsDto) throws NoSuchElementException;
+    Optional<ReaderDto> updateReaderInfo(int readerId, ReaderDto readerDetailsDto);
 
     void deleteReader(int id);
 
     List<ReaderDto> searchReaderByName(String name);
 
-    ReaderDto searchReaderByPhoneNumber(String phone);
+    Optional<ReaderDto> searchReaderByPhoneNumber(String phone);
 
-    ReaderDto searchReaderByEmail(String email);
+    Optional<ReaderDto> searchReaderByEmail(String email);
 }

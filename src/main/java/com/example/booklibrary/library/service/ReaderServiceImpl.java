@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -32,12 +31,9 @@ public class ReaderServiceImpl implements ReaderService {
                 .toList();
     }
 
-    public ReaderDto getReaderById(int id) {
-        Reader reader = readerRepository
-                .findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Reader with ID " + id + " not found."));
-
-        return readerMapper.mapEntityToDto(reader);
+    public Optional<ReaderDto> getReaderById(int id) {
+        return readerRepository.findById(id)
+                .map(readerMapper::mapEntityToDto);
     }
 
     public Reader saveReader(ReaderDto readerDto) {
@@ -46,37 +42,16 @@ public class ReaderServiceImpl implements ReaderService {
         return readerRepository.save(reader);
     }
 
-    public void updateReaderInfo(int readerId, ReaderDto readerDetailsDto) {
-//        Reader reader = readerRepository
-//                .findById(readerId)
-//                .orElseThrow(() -> new NoSuchElementException("Reader with ID " + readerId + " not found."));
-//
-//        Reader readerDetails = readerMapper.mapDtoToEntity(readerDetailsDto);
-//
-//        reader.setFirstName(readerDetails.getFirstName());
-//        reader.setLastName(readerDetails.getLastName());
-//        reader.setPhone(readerDetails.getPhone());
-//        reader.setAddress(readerDetails.getAddress());
-//        reader.setEmail(readerDetails.getEmail());
-//
-//        readerRepository.save(reader);
-
-        Optional<Reader> existingReaderOptional = readerRepository.findById(readerId);
-        if (existingReaderOptional.isEmpty()) {
-            throw new NoSuchElementException("Reader with ID " + readerId + " not found.");
-        }
-        Reader existingReader = existingReaderOptional.get();
-
-
-        existingReader.setFirstName(readerDetailsDto.firstName());
-        existingReader.setLastName(readerDetailsDto.lastName());
-        existingReader.setPhone(readerDetailsDto.phone());
-        existingReader.setAddress(readerDetailsDto.address());
-        existingReader.setEmail(readerDetailsDto.email());
-
-        Reader updatedReader = readerRepository.save(existingReader);
-
-        readerMapper.mapEntityToDto(updatedReader);
+    public Optional<ReaderDto> updateReaderInfo(int readerId, ReaderDto readerDetailsDto) {
+        return readerRepository.findById(readerId).map(existingReader -> {
+            existingReader.setFirstName(readerDetailsDto.firstName());
+            existingReader.setLastName(readerDetailsDto.lastName());
+            existingReader.setPhone(readerDetailsDto.phone());
+            existingReader.setAddress(readerDetailsDto.address());
+            existingReader.setEmail(readerDetailsDto.email());
+            Reader updatedReader = readerRepository.save(existingReader);
+            return readerMapper.mapEntityToDto(updatedReader);
+        });
     }
 
     public void deleteReader(int id){
@@ -90,19 +65,15 @@ public class ReaderServiceImpl implements ReaderService {
                 .toList();
     }
 
-    public ReaderDto searchReaderByPhoneNumber(String phone) {
-        Reader reader = readerRepository
-                .findReaderByPhone(phone)
-                .orElseThrow(() -> new NoSuchElementException("Reader with phone " + phone + " not found."));
+    public Optional<ReaderDto> searchReaderByPhoneNumber(String phone) {
+        Optional<Reader> optionalReader = readerRepository.findReaderByPhone(phone);
 
-        return readerMapper.mapEntityToDto(reader);
+        return optionalReader.map(readerMapper::mapEntityToDto);
     }
 
-    public ReaderDto searchReaderByEmail(String email) {
-        Reader reader = readerRepository
-                .findReaderByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Reader with email " + email + " not found."));
+    public Optional<ReaderDto> searchReaderByEmail(String email) {
+        Optional<Reader> optionalReader = readerRepository.findReaderByEmail(email);
 
-        return readerMapper.mapEntityToDto(reader);
+        return optionalReader.map(readerMapper::mapEntityToDto);
     }
 }
