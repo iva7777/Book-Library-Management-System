@@ -1,6 +1,8 @@
 package com.example.booklibrary.library.controller;
 
 import com.example.booklibrary.library.dto.ReaderDto;
+import com.example.booklibrary.library.exception.ApiResponse;
+import com.example.booklibrary.library.exception.ResponseHelper;
 import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.service.interfaces.ReaderService;
 import jakarta.validation.Valid;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -28,33 +29,37 @@ public class ReaderController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ReaderDto> getReaderById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<ReaderDto>> getReaderById(@PathVariable int id) {
         Optional<ReaderDto> readerOptional = readerService.getReaderById(id);
 
-        return readerOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Reader with ID " + id + " not found"));
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader with ID " + id + " not found"));
     }
 
     @GetMapping("/searchByName/{name}")
-    public ResponseEntity<List<ReaderDto>> searchReadersByName(@Valid @PathVariable String name) {
+    public ResponseEntity<?> searchReadersByName(@Valid @PathVariable String name) {
         List<ReaderDto> readers = readerService.searchReaderByName(name);
+        if (readers.isEmpty()) {
+            return ResponseHelper.notFoundResponse("No readers found for the given name.");
+        }
+
         return new ResponseEntity<>(readers, HttpStatus.OK);
     }
 
     @GetMapping("/searchByPhoneNumber/{phoneNumber}")
-    public ResponseEntity<ReaderDto> searchReaderByPhoneNumber(@Valid @PathVariable String phoneNumber) {
+    public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByPhoneNumber(@Valid @PathVariable String phoneNumber) {
         Optional<ReaderDto> readerOptional = readerService.searchReaderByPhoneNumber(phoneNumber);
 
-        return readerOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Reader with phone number " + phoneNumber + " not found"));
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader with phone number " + phoneNumber + " not found"));
     }
 
     @GetMapping("/searchByEmail/{email}")
-    public ResponseEntity<ReaderDto> searchReaderByEmail(@Valid @PathVariable String email) {
+    public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByEmail(@Valid @PathVariable String email) {
         Optional<ReaderDto> readerOptional = readerService.searchReaderByEmail(email);
 
-        return readerOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Reader with email " + email + " not found"));
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader with email " + email + " not found"));
     }
 
     @PostMapping
@@ -64,13 +69,11 @@ public class ReaderController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateReader(@PathVariable int id, @Valid @RequestBody ReaderDto readerDto) {
-        try {
-            readerService.updateReaderInfo(id, readerDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<ApiResponse<ReaderDto>> updateReader(@PathVariable int id, @Valid @RequestBody ReaderDto readerDto) {
+        Optional<ReaderDto> readerOptional = readerService.updateReaderInfo(id, readerDto);
+
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader with ID " + id + " not found"));
     }
 
     @DeleteMapping("{id}")
