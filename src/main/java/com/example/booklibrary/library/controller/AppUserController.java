@@ -2,6 +2,8 @@ package com.example.booklibrary.library.controller;
 
 
 import com.example.booklibrary.library.dto.AppUserDto;
+import com.example.booklibrary.library.exception.ApiResponse;
+import com.example.booklibrary.library.exception.ResponseHelper;
 import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Role;
 import com.example.booklibrary.library.service.interfaces.AppUserService;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -30,24 +31,28 @@ public class AppUserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AppUserDto> getUserById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<AppUserDto>> getUserById(@PathVariable int id) {
         Optional<AppUserDto> userOptional = appUserService.getUserById(id);
 
-        return userOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
+        return userOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("User with ID " + id + " not found"));
     }
 
     @GetMapping("/searchByUsername/{username}")
-    public ResponseEntity<AppUserDto> searchUsersByUsername(@Valid @PathVariable String username) {
+    public ResponseEntity<ApiResponse<AppUserDto>> searchUsersByUsername(@Valid @PathVariable String username) {
         Optional<AppUserDto> userOptional = appUserService.searchUserByUsername(username);
 
-        return userOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("User with username " + username + " not found"));
+        return userOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("User with username " + username + " not found"));
     }
 
     @GetMapping("/searchByRole/{role}")
-    public ResponseEntity<List<AppUserDto>> searchUsersByRole(@Valid @PathVariable Role role) {
+    public ResponseEntity<?> searchUsersByRole(@Valid @PathVariable Role role) {
         List<AppUserDto> users = appUserService.searchUsersByRole(role);
+        if (users.isEmpty()) {
+            return ResponseHelper.failureResponse("No users found for the given role.");
+        }
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -58,11 +63,11 @@ public class AppUserController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AppUserDto> updateUser(@PathVariable int id, @Valid @RequestBody AppUserDto appUserDto) {
+    public ResponseEntity<ApiResponse<AppUserDto>> updateUser(@PathVariable int id, @Valid @RequestBody AppUserDto appUserDto) {
         Optional<AppUserDto> userOptional = appUserService.updateUserInfo(id, appUserDto);
 
-        return userOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
+        return userOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("User with ID " + id + " not found"));
     }
 
     @DeleteMapping("{id}")
