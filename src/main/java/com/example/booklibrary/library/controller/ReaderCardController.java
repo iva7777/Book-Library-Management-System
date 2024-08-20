@@ -1,6 +1,8 @@
 package com.example.booklibrary.library.controller;
 
 import com.example.booklibrary.library.dto.ReaderCardDto;
+import com.example.booklibrary.library.exception.ApiResponse;
+import com.example.booklibrary.library.exception.ResponseHelper;
 import com.example.booklibrary.library.model.ReaderCard;
 import com.example.booklibrary.library.service.interfaces.ReaderCardService;
 import jakarta.validation.Valid;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -28,11 +29,11 @@ public class ReaderCardController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ReaderCardDto> getReaderCardById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<ReaderCardDto>> getReaderCardById(@PathVariable int id) {
         Optional<ReaderCardDto> readerCardOptional = readerCardService.getReaderCardById(id);
 
-        return readerCardOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Reader card with ID " + id + " not found"));
+        return readerCardOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader card with ID " + id + " not found"));
     }
 
     @PostMapping
@@ -42,11 +43,12 @@ public class ReaderCardController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ReaderCardDto> updateReaderCard(@PathVariable int id, @Valid @RequestBody ReaderCardDto readerCardDto) {
+    public ResponseEntity<ApiResponse<ReaderCardDto>> updateReaderCard(@PathVariable int id, @Valid @RequestBody ReaderCardDto readerCardDto) {
         Optional<ReaderCardDto> readerCardOptional = readerCardService.updateReaderCard(id, readerCardDto);
 
-        return readerCardOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Reader card with ID " + id + " not found"));
+        return readerCardOptional
+                .map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader card with ID " + id + " not found."));
     }
 
     @DeleteMapping("{id}")

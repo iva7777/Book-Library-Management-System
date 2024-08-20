@@ -1,6 +1,8 @@
 package com.example.booklibrary.library.controller;
 
 import com.example.booklibrary.library.dto.AuthorDto;
+import com.example.booklibrary.library.exception.ApiResponse;
+import com.example.booklibrary.library.exception.ResponseHelper;
 import com.example.booklibrary.library.model.Author;
 import com.example.booklibrary.library.service.interfaces.AuthorService;
 import jakarta.validation.Valid;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -28,17 +29,21 @@ public class AuthorController {
     }
 
     @GetMapping("/searchByBookTitle/{title}")
-    public ResponseEntity<List<AuthorDto>> searchAuthorsByBookTitle(@Valid @PathVariable String title) {
+    public ResponseEntity<?> searchAuthorsByBookTitle(@Valid @PathVariable String title) {
         List<AuthorDto> authors = authorService.searchAuthorByBook(title);
+
+        if (authors.isEmpty()) {
+            return ResponseHelper.notFoundResponse("No authors found for the given book title.");
+        }
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<AuthorDto>> getAuthorById(@PathVariable int id) {
         Optional<AuthorDto> authorOptional = authorService.getAuthorById(id);
 
-        return authorOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
+        return authorOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Author with ID " + id + " not found"));
     }
 
     @PostMapping
@@ -48,11 +53,11 @@ public class AuthorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AuthorDto> updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorDto authorDto) {
+    public ResponseEntity<ApiResponse<AuthorDto>> updateAuthor(@PathVariable int id, @Valid @RequestBody AuthorDto authorDto) {
         Optional<AuthorDto> authorOptional = authorService.updateAuthorInfo(id, authorDto);
 
-        return authorOptional.map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Author with ID " + id + " not found"));
+        return authorOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Author with ID " + id + " not found"));
     }
 
     @DeleteMapping("{id}")
