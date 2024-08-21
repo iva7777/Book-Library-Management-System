@@ -6,6 +6,7 @@ import com.example.booklibrary.library.model.Book;
 import com.example.booklibrary.library.model.BookStatus;
 import com.example.booklibrary.library.repository.BookRepository;
 import com.example.booklibrary.library.service.interfaces.BookService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper) {
+    public BookServiceImpl(@NotNull BookRepository bookRepository, @NotNull BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
     }

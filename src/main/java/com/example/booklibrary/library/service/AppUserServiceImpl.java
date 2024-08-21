@@ -6,6 +6,7 @@ import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Role;
 import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.service.interfaces.AppUserService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserMapper appUserMapper;
 
     @Autowired
-    public AppUserServiceImpl(AppUserRepository appUserRepository, AppUserMapper appUserMapper) {
+    public AppUserServiceImpl(@NotNull AppUserRepository appUserRepository, @NotNull AppUserMapper appUserMapper) {
         this.appUserRepository = appUserRepository;
         this.appUserMapper = appUserMapper;
     }
