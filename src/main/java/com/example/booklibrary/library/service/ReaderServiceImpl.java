@@ -5,6 +5,7 @@ import com.example.booklibrary.library.mapper.ReaderMapper;
 import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.repository.ReaderRepository;
 import com.example.booklibrary.library.service.interfaces.ReaderService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class ReaderServiceImpl implements ReaderService {
     private final ReaderMapper readerMapper;
 
     @Autowired
-    public ReaderServiceImpl(ReaderRepository readerRepository, ReaderMapper readerMapper) {
+    public ReaderServiceImpl(@NotNull ReaderRepository readerRepository, @NotNull ReaderMapper readerMapper) {
         this.readerRepository = readerRepository;
         this.readerMapper = readerMapper;
     }

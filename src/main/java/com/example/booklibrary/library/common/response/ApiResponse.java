@@ -1,4 +1,4 @@
-package com.example.booklibrary.library.exception;
+package com.example.booklibrary.library.common.response;
 
 public class ApiResponse<T> {
     private boolean isSuccessful;

@@ -1,5 +1,7 @@
 package com.example.booklibrary.library.exception;
 
+import com.example.booklibrary.library.common.response.ApiResponse;
+import com.example.booklibrary.library.exception.common.BookNotAvailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,58 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(BookNotAvailableException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBookNotAvailableException(BookNotAvailableException ex) {
+        logger.info(ex.getMessage(), ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "The book is not available.",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNullPointerException(NullPointerException ex) {
+        logger.error("Null Pointer Exception occurred.", ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "A null pointer error occurred. Please check your request.",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(NullPointerException ex) {
+        logger.error("Illegal Argument Exception occurred.", ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "An illegal argument error occurred. Please check your request.",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<Object>> handleRuntimeException(RuntimeException ex) {
+        logger.error("Runtime Exception occurred.", ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "A runtime error occurred. Please check your request.",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleUnexpectedException(Exception ex) {
