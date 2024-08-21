@@ -5,6 +5,7 @@ import com.example.booklibrary.library.mapper.ReaderCardMapper;
 import com.example.booklibrary.library.model.ReaderCard;
 import com.example.booklibrary.library.repository.ReaderCardRepository;
 import com.example.booklibrary.library.service.interfaces.ReaderCardService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class ReaderCardServiceImpl implements ReaderCardService {
     private final ReaderCardMapper readerCardMapper;
 
     @Autowired
-    public ReaderCardServiceImpl(ReaderCardRepository readerCardRepository, ReaderCardMapper readerCardMapper) {
+    public ReaderCardServiceImpl(@NotNull ReaderCardRepository readerCardRepository, @NotNull ReaderCardMapper readerCardMapper) {
         this.readerCardRepository = readerCardRepository;
         this.readerCardMapper = readerCardMapper;
     }

@@ -5,6 +5,7 @@ import com.example.booklibrary.library.mapper.AuthorMapper;
 import com.example.booklibrary.library.model.Author;
 import com.example.booklibrary.library.repository.AuthorRepository;
 import com.example.booklibrary.library.service.interfaces.AuthorService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
+    public AuthorServiceImpl(@NotNull AuthorRepository authorRepository, @NotNull AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
     }

@@ -1,5 +1,6 @@
-package com.example.booklibrary.library.exception;
+package com.example.booklibrary.library.common.util;
 
+import com.example.booklibrary.library.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
