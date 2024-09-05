@@ -17,4 +17,6 @@ public interface ReaderRepository extends JpaRepository<Reader, Integer> {
     Optional<Reader> findReaderByPhone(String phone);
 
     Optional<Reader> findReaderByEmail(String email);
+
+    Optional<Reader> findReaderByAppUserId(int userId);
 }

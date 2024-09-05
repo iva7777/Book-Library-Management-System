@@ -11,6 +11,10 @@ public interface ReaderService {
 
     Optional<ReaderDto> getReaderById(int id);
 
+    Optional<ReaderDto> getReaderByUserId(int userId);
+
+    Optional<ReaderDto> getOwnReader();
+
     Reader saveReader(ReaderDto readerDto);
 
     Optional<ReaderDto> updateReaderInfo(int readerId, ReaderDto readerDetailsDto);
