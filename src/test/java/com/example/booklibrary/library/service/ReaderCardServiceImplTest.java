@@ -3,7 +3,9 @@ package com.example.booklibrary.library.service;
 import com.example.booklibrary.library.dto.ReaderCardDto;
 import com.example.booklibrary.library.mapper.ReaderCardMapper;
 import com.example.booklibrary.library.model.ReaderCard;
+import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderCardRepository;
+import com.example.booklibrary.library.security.AuthenticationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,12 @@ class ReaderCardServiceImplTest {
     @Mock
     private ReaderCardRepository readerCardRepository;
 
+    @Mock
+    private AuthenticationService authenticationService;
+
+    @Mock
+    private AppUserRepository appUserRepository;
+
     private ReaderCardMapper readerCardMapper;
 
     @InjectMocks
@@ -36,7 +44,7 @@ class ReaderCardServiceImplTest {
     @BeforeEach
     void setUp() {
         readerCardMapper = new ReaderCardMapper();
-        readerCardService = new ReaderCardServiceImpl(readerCardRepository, readerCardMapper);
+        readerCardService = new ReaderCardServiceImpl(readerCardRepository, authenticationService, appUserRepository, readerCardMapper);
 
         Calendar calendarRent = Calendar.getInstance();
         calendarRent.set(2024, Calendar.AUGUST, 15);
@@ -86,6 +94,33 @@ class ReaderCardServiceImplTest {
         Assertions.assertTrue(newDtoOptional.isEmpty());
 
         verify(readerCardRepository).findById(1);
+    }
+
+    @Test
+    void shouldGetReaderCardByReaderId() {
+        when(readerCardRepository.findByReaderId(1)).thenReturn(Optional.of(readerCard));
+
+        Optional<ReaderCardDto> result = readerCardService.getReaderCardByReaderId(1);
+
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(readerCardDto, result.get());
+
+        verify(readerCardRepository).findByReaderId(1);
+    }
+
+    @Test
+    void shouldNotGetOwnReaderCardWhenUserNotFound() {
+        // Arrange
+        String loggedUsername = "user123";
+
+        when(authenticationService.getAuthenticatedUsername()).thenReturn(loggedUsername);
+        when(appUserRepository.findByUsername(loggedUsername)).thenReturn(Optional.empty());
+
+        Optional<ReaderCardDto> result = readerCardService.getOwnReaderCard();
+
+        Assertions.assertTrue(result.isEmpty());
+        verify(authenticationService).getAuthenticatedUsername();
+        verify(appUserRepository).findByUsername(loggedUsername);
     }
 
     @Test

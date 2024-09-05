@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public class AppUserMapper {
-    public AppUserDto mapEntityToDto(AppUser appUser){
+    public AppUserDto mapEntityToDto(AppUser appUser) {
         if (appUser == null){
             return null;
         }

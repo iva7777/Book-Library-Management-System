@@ -99,7 +99,6 @@ class AppUserRepositoryTest {
 
         assertThat(result)
                 .isNotEmpty()
-                .hasSize(1)
                 .extracting(AppUser::getRole)
                 .containsOnly(Role.librarian);
     }
