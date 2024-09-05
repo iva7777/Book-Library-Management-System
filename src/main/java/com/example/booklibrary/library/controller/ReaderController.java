@@ -62,6 +62,22 @@ public class ReaderController {
                 .orElse(ResponseHelper.notFoundResponse("Reader with email " + email + " not found"));
     }
 
+    @GetMapping("/searchByUserId/{userId}")
+    public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByUserId(@Valid @PathVariable int userId) {
+        Optional<ReaderDto> readerOptional = readerService.getReaderByUserId(userId);
+
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader with userId " + userId + " not found"));
+    }
+
+    @GetMapping("/loggedReader")
+    public ResponseEntity<ApiResponse<ReaderDto>> getLoggedReader() {
+        Optional<ReaderDto> readerOptional = readerService.getOwnReader();
+
+        return readerOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader not logged in"));
+    }
+
     @PostMapping
     public ResponseEntity<Reader> saveReader(@Valid @RequestBody ReaderDto readerDto) {
         Reader reader = readerService.saveReader(readerDto);

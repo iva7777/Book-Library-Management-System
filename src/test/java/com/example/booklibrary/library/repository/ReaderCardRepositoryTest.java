@@ -69,6 +69,13 @@ class ReaderCardRepositoryTest {
     }
 
     @Test
+    void shouldNotFindReaderCardByReaderId() {
+        Optional<ReaderCard> notToFind = readerCardRepository.findByReaderId(999);
+
+        assertThat(notToFind).isEmpty();
+    }
+
+    @Test
     void shouldCreateReaderCard() {
         ReaderCard saved = readerCardRepository.save(readerCard);
         assertThat(saved.getId()).isNotNull();

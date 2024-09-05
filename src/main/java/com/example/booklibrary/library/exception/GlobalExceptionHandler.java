@@ -2,6 +2,8 @@ package com.example.booklibrary.library.exception;
 
 import com.example.booklibrary.library.common.response.ApiResponse;
 import com.example.booklibrary.library.exception.common.BookNotAvailableException;
+import com.example.booklibrary.library.exception.common.NameAlreadyTakenException;
+import com.example.booklibrary.library.exception.common.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,37 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookNotAvailableException.class)
     public ResponseEntity<ApiResponse<Object>> handleBookNotAvailableException(BookNotAvailableException ex) {
-        logger.info(ex.getMessage(), ex);
+        logger.warn(ex.getMessage(), ex);
 
         ApiResponse<Object> response = new ApiResponse<>(
                 false,
                 "The book is not available.",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NameAlreadyTakenException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNameAlreadyTakenException(NameAlreadyTakenException ex) {
+        logger.warn(ex.getMessage(), ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "This username is already taken!",
+                null
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNotFoundException(NotFoundException ex) {
+        logger.warn(ex.getMessage(), ex);
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                false,
+                "This user is not found!",
                 null
         );
 

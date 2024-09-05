@@ -2,8 +2,11 @@ package com.example.booklibrary.library.service;
 
 import com.example.booklibrary.library.dto.ReaderDto;
 import com.example.booklibrary.library.mapper.ReaderMapper;
+import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Reader;
+import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderRepository;
+import com.example.booklibrary.library.security.AuthenticationService;
 import com.example.booklibrary.library.service.interfaces.ReaderService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,15 @@ import java.util.Optional;
 @Service
 public class ReaderServiceImpl implements ReaderService {
     private final ReaderRepository readerRepository;
+    private final AppUserRepository appUserRepository;
+    private final AuthenticationService authenticationService;
     private final ReaderMapper readerMapper;
 
     @Autowired
-    public ReaderServiceImpl(@NotNull ReaderRepository readerRepository, @NotNull ReaderMapper readerMapper) {
+    public ReaderServiceImpl(@NotNull ReaderRepository readerRepository, @NotNull AppUserRepository appUserRepository, @NotNull AuthenticationService authenticationService, @NotNull ReaderMapper readerMapper) {
         this.readerRepository = readerRepository;
+        this.appUserRepository = appUserRepository;
+        this.authenticationService = authenticationService;
         this.readerMapper = readerMapper;
     }
 
@@ -35,6 +42,23 @@ public class ReaderServiceImpl implements ReaderService {
     public Optional<ReaderDto> getReaderById(int id) {
         return readerRepository.findById(id)
                 .map(readerMapper::mapEntityToDto);
+    }
+
+    @Override
+    public Optional<ReaderDto> getReaderByUserId(int userId) {
+        return readerRepository.findReaderByAppUserId(userId)
+                .map(readerMapper::mapEntityToDto);
+    }
+
+    public Optional<ReaderDto> getOwnReader() {
+        String loggedUsername = authenticationService.getAuthenticatedUsername();
+        Optional<AppUser> loggedUser = appUserRepository.findByUsername(loggedUsername);
+
+        if (loggedUser.isPresent()) {
+            return getReaderByUserId(loggedUser.get().getId());
+        }
+
+        return Optional.empty();
     }
 
     public Reader saveReader(ReaderDto readerDto) {

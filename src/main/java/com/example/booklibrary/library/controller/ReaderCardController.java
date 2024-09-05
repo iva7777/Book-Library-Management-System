@@ -4,6 +4,8 @@ import com.example.booklibrary.library.common.response.ApiResponse;
 import com.example.booklibrary.library.common.util.ResponseHelper;
 import com.example.booklibrary.library.dto.ReaderCardDto;
 import com.example.booklibrary.library.model.ReaderCard;
+import com.example.booklibrary.library.security.AuthenticationService;
+import com.example.booklibrary.library.service.ReaderServiceImpl;
 import com.example.booklibrary.library.service.interfaces.ReaderCardService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,13 @@ import java.util.Optional;
 @RequestMapping("api/v1/reader-cards")
 public class ReaderCardController {
     private final ReaderCardService readerCardService;
+    private final AuthenticationService authenticationService;
+    private final ReaderServiceImpl readerService;
 
-    public ReaderCardController(ReaderCardService readerCardService) {
+    public ReaderCardController(ReaderCardService readerCardService, AuthenticationService authenticationService, ReaderServiceImpl readerService) {
         this.readerCardService = readerCardService;
+        this.authenticationService = authenticationService;
+        this.readerService = readerService;
     }
 
     @GetMapping
@@ -34,6 +40,14 @@ public class ReaderCardController {
 
         return readerCardOptional.map(ResponseHelper::successResponse)
                 .orElse(ResponseHelper.notFoundResponse("Reader card with ID " + id + " not found"));
+    }
+
+    @GetMapping("/searchByReaderId/{readerId}")
+    public ResponseEntity<ApiResponse<ReaderCardDto>> searchReaderCardByReaderId(@Valid @PathVariable int readerId) {
+        Optional<ReaderCardDto> readerCardOptional = readerCardService.getReaderCardByReaderId(readerId);
+
+        return readerCardOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader card with userId " + readerId + " not found"));
     }
 
     @PostMapping

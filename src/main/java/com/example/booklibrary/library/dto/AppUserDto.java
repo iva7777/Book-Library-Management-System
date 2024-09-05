@@ -9,7 +9,7 @@ public record AppUserDto(int id,
                          @Size(max = 20, message = "Username must be at most 20 characters")
                          @NotBlank
                          String username,
-                         @Size(max = 20, message = "Password must be at most 20 characters")
+                         @Size(max = 255, message = "Password must be at most 20 characters")
                          @NotBlank
                          String password,
                          @NotNull(message = "Role cannot be null.")

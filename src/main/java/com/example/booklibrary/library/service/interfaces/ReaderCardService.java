@@ -11,6 +11,11 @@ public interface ReaderCardService {
 
     Optional<ReaderCardDto> getReaderCardById(int id);
 
+    Optional<ReaderCardDto> getReaderCardByReaderId(int readerId);
+
+    Optional<ReaderCardDto> getOwnReaderCard();
+
+
     ReaderCard saveReaderCard(ReaderCardDto readerCardDto);
 
     Optional<ReaderCardDto> updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto);

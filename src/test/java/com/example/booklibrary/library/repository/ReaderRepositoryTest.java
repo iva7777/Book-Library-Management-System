@@ -24,6 +24,7 @@ class ReaderRepositoryTest {
 
     @BeforeEach
     void setUp() {
+
         reader = new Reader();
 
         reader.setFirstName("Read");
