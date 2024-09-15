@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/reader-cards")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReaderCardController {
     private final ReaderCardService readerCardService;
     private final AuthenticationService authenticationService;
