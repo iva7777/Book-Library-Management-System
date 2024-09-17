@@ -15,5 +15,7 @@ public record BookDto(int id,
                       @Size(max = 20, message = "Genre must be at most 20 characters")
                       String genre,
                       @NotNull(message = "Book status cannot be null.")
-                      BookStatus status) {
+                      BookStatus status,
+                      @NotNull(message = "Authors cannot be null")
+                      String authorNames) {
 }
