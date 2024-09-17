@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/reader-cards/searchByUserId/{userId}").permitAll()
                         .requestMatchers("api/v1/readers/**").hasAuthority(Role.librarian.name())
                         .requestMatchers("api/v1/reader-cards/**").hasAnyAuthority(Role.librarian.name(), Role.reader.name())
-                        .requestMatchers("api/v1/users/**").hasAnyRole(Role.admin.name(), Role.librarian.name())
+                        .requestMatchers("api/v1/users/**").hasAuthority(Role.librarian.name())
                         .requestMatchers("api/v1/authors/**", "api/v1/books/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
