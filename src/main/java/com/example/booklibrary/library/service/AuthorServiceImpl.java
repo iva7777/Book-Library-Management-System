@@ -18,7 +18,10 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorServiceImpl(@NotNull AuthorRepository authorRepository, @NotNull AuthorMapper authorMapper) {
+    public AuthorServiceImpl(
+            @NotNull AuthorRepository authorRepository,
+            @NotNull AuthorMapper authorMapper
+    ) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
     }
