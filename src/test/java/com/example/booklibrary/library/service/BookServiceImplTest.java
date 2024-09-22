@@ -4,6 +4,8 @@ import com.example.booklibrary.library.dto.BookDto;
 import com.example.booklibrary.library.mapper.BookMapper;
 import com.example.booklibrary.library.model.Book;
 import com.example.booklibrary.library.model.BookStatus;
+import com.example.booklibrary.library.repository.AuthorBookRepository;
+import com.example.booklibrary.library.repository.AuthorRepository;
 import com.example.booklibrary.library.repository.BookRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +28,13 @@ class BookServiceImplTest {
     @Mock
     private BookRepository bookRepository;
 
+    @Mock
+    private AuthorRepository authorRepository;
+
+    @Mock
+    private AuthorBookRepository authorBookRepository;
+
+    @InjectMocks
     private BookMapper bookMapper;
     @InjectMocks
     private BookServiceImpl bookService;
@@ -36,7 +45,7 @@ class BookServiceImplTest {
     @BeforeEach
     void setUp() {
         bookMapper = new BookMapper();
-        bookService = new BookServiceImpl(bookRepository, bookMapper);
+        bookService = new BookServiceImpl(bookRepository, authorRepository, authorBookRepository, bookMapper);
 
         book = new Book();
         book.setId(1);
@@ -47,7 +56,7 @@ class BookServiceImplTest {
         book.setGenre("comics");
         book.setStatus(BookStatus.available);
 
-        bookDto = new BookDto(1, "test", "test", "5145-124-544", "comics", BookStatus.available);
+        bookDto = new BookDto(1, "test", "test", "5145-124-544", "comics", BookStatus.available, "Unknown");
     }
 
     @Test
@@ -59,6 +68,7 @@ class BookServiceImplTest {
         String isbn = "5145-124-544";
         String genre = "comics";
         BookStatus status = BookStatus.available;
+        String authorNames = "Unknown";
 
         List<BookDto> books = bookService.getAllBooks();
 
@@ -68,6 +78,7 @@ class BookServiceImplTest {
         Assertions.assertEquals(isbn, books.getFirst().isbn());
         Assertions.assertEquals(genre, books.getFirst().genre());
         Assertions.assertEquals(status, books.getFirst().status());
+        Assertions.assertEquals(authorNames, books.getFirst().authorNames());
     }
 
     @Test

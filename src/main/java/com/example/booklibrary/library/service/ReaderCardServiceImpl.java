@@ -3,9 +3,11 @@ package com.example.booklibrary.library.service;
 import com.example.booklibrary.library.dto.ReaderCardDto;
 import com.example.booklibrary.library.mapper.ReaderCardMapper;
 import com.example.booklibrary.library.model.AppUser;
+import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.model.ReaderCard;
 import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderCardRepository;
+import com.example.booklibrary.library.repository.ReaderRepository;
 import com.example.booklibrary.library.security.AuthenticationService;
 import com.example.booklibrary.library.service.interfaces.ReaderCardService;
 import jakarta.validation.constraints.NotNull;
@@ -18,13 +20,15 @@ import java.util.Optional;
 @Service
 public class ReaderCardServiceImpl implements ReaderCardService {
     private final ReaderCardRepository readerCardRepository;
+    private final ReaderRepository readerRepository;
     private final AuthenticationService authenticationService;
     private final AppUserRepository appUserRepository;
     private final ReaderCardMapper readerCardMapper;
 
     @Autowired
-    public ReaderCardServiceImpl(@NotNull ReaderCardRepository readerCardRepository, AuthenticationService authenticationService, AppUserRepository appUserRepository, @NotNull ReaderCardMapper readerCardMapper) {
+    public ReaderCardServiceImpl(@NotNull ReaderCardRepository readerCardRepository, ReaderRepository readerRepository, AuthenticationService authenticationService, AppUserRepository appUserRepository, @NotNull ReaderCardMapper readerCardMapper) {
         this.readerCardRepository = readerCardRepository;
+        this.readerRepository = readerRepository;
         this.authenticationService = authenticationService;
         this.appUserRepository = appUserRepository;
         this.readerCardMapper = readerCardMapper;
@@ -65,7 +69,10 @@ public class ReaderCardServiceImpl implements ReaderCardService {
     public ReaderCard saveReaderCard(ReaderCardDto readerCardDto) {
         ReaderCard readerCard = readerCardMapper.mapDtoToEntity(readerCardDto);
 
-        return readerCardRepository.save(readerCard);
+        ReaderCard savedCard = readerCardRepository.save(readerCard);
+        validateReader(savedCard, readerCardDto.readerNames());
+
+        return savedCard;
     }
 
     public Optional<ReaderCardDto> updateReaderCard(int readerCardId, ReaderCardDto readerCardDetailsDto) {
@@ -96,4 +103,31 @@ public class ReaderCardServiceImpl implements ReaderCardService {
     public void deleteReaderCard(int id){
         readerCardRepository.deleteById(id);
     }
+
+    private void validateReader(ReaderCard readerCard, String readerName) {
+        if (readerName == null || readerName.trim().isEmpty()) {
+            return;
+        }
+
+        String[] splitName = readerName.trim().split("\\s+");
+        if (splitName.length >= 2) {
+            String firstName = splitName[0];
+            String lastName = splitName[1];
+
+            Optional<Reader> optionalReader = readerRepository.findByFirstNameAndLastName(firstName, lastName);
+            Reader reader;
+
+            if (!optionalReader.isPresent()) {
+                reader = new Reader();
+                reader.setFirstName(firstName);
+                reader.setLastName(lastName);
+                reader = readerRepository.save(reader);
+            } else {
+                reader = optionalReader.get();
+            }
+
+            readerCard.setReader(reader);
+        }
+    }
+
 }

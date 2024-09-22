@@ -76,9 +76,10 @@ class ReaderServiceImplTest {
         readerCard.setId(1);
         readerCard.setRentDate(rentDate);
         readerCard.setReturnDate(returnDate);
+        readerCard.setReader(reader);
 
         reader.setReaderCard(readerCard);
-        readerCardDto = new ReaderCardDto(1, rentDate, returnDate);
+        readerCardDto = new ReaderCardDto(1, rentDate, returnDate, "John Doe");
 
         readerDto = new ReaderDto(1, "John", "Doe", "089564712", "test", "test@test.com", readerCardDto);
         appUser = new AppUser();

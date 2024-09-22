@@ -45,7 +45,7 @@ class AuthorMapperTest {
 
     @Test
     void shouldMapDtoToEntity() {
-        AuthorDto authorDto = new AuthorDto(1, "John", "Doe", "Author bio here");
+        AuthorDto authorDto = new AuthorDto(1, "John", "Doe", "Author bio here", "Books");
 
         Author author = authorMapper.mapDtoToEntity(authorDto);
 

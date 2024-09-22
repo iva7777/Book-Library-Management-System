@@ -60,12 +60,14 @@ public class ReaderMapper {
         Integer id = null;
         Date rentDate = null;
         Date returnDate = null;
+        String readerNames = null;
 
         id = readerCard.getId();
         rentDate = readerCard.getRentDate();
         returnDate = readerCard.getReturnDate();
+        readerNames = readerCard.getReader().getFirstName() + " " + readerCard.getReader().getLastName();
 
-        return new ReaderCardDto(id, rentDate, returnDate);
+        return new ReaderCardDto(id, rentDate, returnDate, readerNames);
     }
 
     protected ReaderCard mapReaderCardDtoToReaderCard(ReaderCardDto readerCardDto){

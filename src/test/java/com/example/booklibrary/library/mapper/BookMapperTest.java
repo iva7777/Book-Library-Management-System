@@ -52,7 +52,7 @@ class BookMapperTest {
 
     @Test
     void shouldMapDtoToEntity() {
-        BookDto bookDto = new BookDto(1, "test", "Doe", "isbn", "genre", BookStatus.available);
+        BookDto bookDto = new BookDto(1, "test", "Doe", "isbn", "genre", BookStatus.available, "John Doe");
 
         Book book = bookMapper.mapDtoToEntity(bookDto);
 

@@ -1,6 +1,7 @@
 package com.example.booklibrary.library.mapper;
 
 import com.example.booklibrary.library.dto.ReaderCardDto;
+import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.model.ReaderCard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,8 @@ class ReaderCardMapperTest {
 
     private Date rentDate;
     private Date returnDate;
+    private String readerNames;
+    private Reader reader;
 
     @BeforeEach
     public void setup() {
@@ -28,6 +31,11 @@ class ReaderCardMapperTest {
         Calendar calendarReturn = Calendar.getInstance();
         calendarReturn.set(2024, Calendar.SEPTEMBER, 15);
         returnDate = calendarReturn.getTime();
+
+        readerNames = "Jon Doe";
+        reader = new Reader();
+        reader.setFirstName("Joe");
+        reader.setLastName("Doe");
     }
 
     @Test
@@ -51,17 +59,19 @@ class ReaderCardMapperTest {
         readerCard.setId(1);
         readerCard.setRentDate(rentDate);
         readerCard.setReturnDate(returnDate);
+        readerCard.setReader(reader);
 
         ReaderCardDto readerCardDto = readerCardMapper.mapEntityToDto(readerCard);
         Assertions.assertNotNull(readerCardDto);
         Assertions.assertEquals(readerCard.getId(), readerCardDto.id());
         Assertions.assertEquals(readerCard.getRentDate(), readerCardDto.rentDate());
         Assertions.assertEquals(readerCard.getReturnDate(), readerCardDto.returnDate());
+        Assertions.assertEquals(readerCard.getReader().getFirstName() + " " + readerCard.getReader().getLastName(), readerCardDto.readerNames());
     }
 
     @Test
     void shouldMapDtoToEntity() {
-        ReaderCardDto readerCardDto = new ReaderCardDto(1, rentDate, returnDate);
+        ReaderCardDto readerCardDto = new ReaderCardDto(1, rentDate, returnDate, readerNames);
 
         ReaderCard readerCard = readerCardMapper.mapDtoToEntity(readerCardDto);
 
