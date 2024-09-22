@@ -1,6 +1,5 @@
 package com.example.booklibrary.library.security.config;
 
-import com.example.booklibrary.library.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,9 +30,9 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("api/v1/readers/loggedReader").permitAll()
                         .requestMatchers("api/v1/reader-cards/searchByUserId/{userId}").permitAll()
-                        .requestMatchers("api/v1/readers/**").hasAuthority(Role.librarian.name())
-                        .requestMatchers("api/v1/reader-cards/**").hasAnyAuthority(Role.librarian.name(), Role.reader.name())
-                        .requestMatchers("api/v1/users/**").hasAuthority(Role.librarian.name())
+                        .requestMatchers("api/v1/readers/**").permitAll()
+                        .requestMatchers("api/v1/reader-cards/**").permitAll()
+                        .requestMatchers("api/v1/users/**").permitAll()
                         .requestMatchers("api/v1/authors/**", "api/v1/books/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

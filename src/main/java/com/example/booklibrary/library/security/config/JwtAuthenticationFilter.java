@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         role = jwtService.extractClaim(jwt, claims -> claims.get("role", String.class));
         logger.warn(role);
 
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

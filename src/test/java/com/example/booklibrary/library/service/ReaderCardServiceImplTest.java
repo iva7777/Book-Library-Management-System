@@ -5,6 +5,7 @@ import com.example.booklibrary.library.mapper.ReaderCardMapper;
 import com.example.booklibrary.library.model.ReaderCard;
 import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderCardRepository;
+import com.example.booklibrary.library.repository.ReaderRepository;
 import com.example.booklibrary.library.security.AuthenticationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +26,15 @@ class ReaderCardServiceImplTest {
     private ReaderCardRepository readerCardRepository;
 
     @Mock
+    private ReaderRepository readerRepository;
+
+    @Mock
     private AuthenticationService authenticationService;
 
     @Mock
     private AppUserRepository appUserRepository;
 
+    @Mock
     private ReaderCardMapper readerCardMapper;
 
     @InjectMocks
@@ -40,11 +45,12 @@ class ReaderCardServiceImplTest {
 
     private Date rentDate;
     private Date returnDate;
+    private String readerNames;
 
     @BeforeEach
     void setUp() {
         readerCardMapper = new ReaderCardMapper();
-        readerCardService = new ReaderCardServiceImpl(readerCardRepository, authenticationService, appUserRepository, readerCardMapper);
+        readerCardService = new ReaderCardServiceImpl(readerCardRepository, readerRepository, authenticationService, appUserRepository, readerCardMapper);
 
         Calendar calendarRent = Calendar.getInstance();
         calendarRent.set(2024, Calendar.AUGUST, 15);
@@ -54,12 +60,14 @@ class ReaderCardServiceImplTest {
         calendarReturn.set(2024, Calendar.SEPTEMBER, 15);
         returnDate = calendarReturn.getTime();
 
+        readerNames = "Unknown";
+
         readerCard = new ReaderCard();
         readerCard.setId(1);
         readerCard.setRentDate(rentDate);
         readerCard.setReturnDate(returnDate);
 
-        readerCardDto = new ReaderCardDto(1, rentDate, returnDate);
+        readerCardDto = new ReaderCardDto(1, rentDate, returnDate, readerNames);
     }
 
     @Test
@@ -71,6 +79,7 @@ class ReaderCardServiceImplTest {
         Assertions.assertEquals(1, readerCards.size());
         Assertions.assertEquals(rentDate, readerCards.getFirst().rentDate());
         Assertions.assertEquals(returnDate, readerCards.getFirst().returnDate());
+        Assertions.assertEquals(readerNames, readerCards.getFirst().readerNames());
     }
 
     @Test
@@ -103,8 +112,9 @@ class ReaderCardServiceImplTest {
         Optional<ReaderCardDto> result = readerCardService.getReaderCardByReaderId(1);
 
         Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(readerCardDto, result.get());
-
+        ReaderCardDto resultDto = result.get();
+        Assertions.assertEquals(readerCardDto, resultDto);
+        Assertions.assertEquals(readerNames, resultDto.readerNames());
         verify(readerCardRepository).findByReaderId(1);
     }
 
