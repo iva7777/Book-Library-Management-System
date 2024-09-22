@@ -4,5 +4,6 @@ import java.util.Date;
 
 public record ReaderCardDto(int id,
                             Date rentDate,
-                            Date returnDate) {
+                            Date returnDate,
+                            String readerNames) {
 }

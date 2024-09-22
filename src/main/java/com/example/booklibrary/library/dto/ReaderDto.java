@@ -8,6 +8,8 @@ public record ReaderDto(int id,
                         @Size(max = 30, message = "First name must be at most 30 characters")
                         @NotBlank
                         String firstName,
+                        @Size(max = 30, message = "Last name must be at most 30 characters")
+                        @NotBlank
                         String lastName,
                         @Size(max = 15, message = "Phone number must be at most 15 characters")
                         @NotBlank
@@ -16,6 +18,7 @@ public record ReaderDto(int id,
                         @NotBlank
                         String address,
                         @Email
+                        @NotBlank
                         String email,
                         ReaderCardDto readerCard) {
 }

@@ -34,6 +34,7 @@ class ReaderMapperTest {
     void shouldMapEntityToDto() {
         Reader reader = new Reader();
         ReaderCard readerCard = new ReaderCard();
+        readerCard.setReader(reader);
 
         reader.setId(1);
         reader.setFirstName("test");
@@ -55,7 +56,7 @@ class ReaderMapperTest {
 
     @Test
     void shouldMapDtoToEntity() {
-        ReaderCardDto readerCardDto = new ReaderCardDto(1, new Date(), new Date());
+        ReaderCardDto readerCardDto = new ReaderCardDto(1, new Date(), new Date(), "Unknown");
         ReaderDto readerDto = new ReaderDto(1, "test", "test", "test", "test", "test", readerCardDto);
 
         Reader reader = readerMapper.mapDtoToEntity(readerDto);

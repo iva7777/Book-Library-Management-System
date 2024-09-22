@@ -14,6 +14,8 @@ public interface ReaderRepository extends JpaRepository<Reader, Integer> {
     @Query("SELECT r FROM Reader r WHERE r.firstName LIKE %:name% OR r.lastName LIKE %:name% OR CONCAT(r.firstName, ' ', r.lastName) LIKE %:name%")
     List<Reader> findReaderByNameContaining(@Param("name") String name);
 
+    Optional<Reader> findByFirstNameAndLastName(String firstName, String lastName);
+
     Optional<Reader> findReaderByPhone(String phone);
 
     Optional<Reader> findReaderByEmail(String email);

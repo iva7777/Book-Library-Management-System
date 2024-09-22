@@ -44,7 +44,7 @@ class AuthorServiceImplTest {
         author.setLastName("Doe");
         author.setBio("just bio");
 
-        authorDto = new AuthorDto(1, "John", "Doe", "just bio");
+        authorDto = new AuthorDto(1, "John", "Doe", "just bio", "No books");
     }
 
     @Test
