@@ -60,7 +60,12 @@ public class ReaderCardServiceImpl implements ReaderCardService {
         Optional<AppUser> loggedUser = appUserRepository.findByUsername(loggedUsername);
 
         if (loggedUser.isPresent()) {
-            return getReaderCardByReaderId(loggedUser.get().getId());
+            AppUser logged = loggedUser.get();
+            int loggedUserId = logged.getId();
+            Optional<Reader> loggedReader = readerRepository.findReaderByAppUserId(loggedUserId);
+            int readerId = loggedReader.get().getId();
+            Optional<ReaderCardDto> result = getReaderCardByReaderId(readerId);
+            return result;
         }
 
         return Optional.empty();
