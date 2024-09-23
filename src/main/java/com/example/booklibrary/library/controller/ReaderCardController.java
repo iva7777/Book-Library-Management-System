@@ -51,6 +51,15 @@ public class ReaderCardController {
                 .orElse(ResponseHelper.notFoundResponse("Reader card with userId " + readerId + " not found"));
     }
 
+
+    @GetMapping("/getOwnReaderCard")
+    public ResponseEntity<ApiResponse<ReaderCardDto>> getOwnReaderCard() {
+        Optional<ReaderCardDto> readerCardDtoOptional = readerCardService.getOwnReaderCard();
+
+        return readerCardDtoOptional.map(ResponseHelper::successResponse)
+                .orElse(ResponseHelper.notFoundResponse("Reader card for this user is not found"));
+    }
+
     @PostMapping
     public ResponseEntity<ReaderCard> saveReaderCard(@Valid @RequestBody ReaderCardDto readerCardDto) {
         ReaderCard readerCard = readerCardService.saveReaderCard(readerCardDto);
