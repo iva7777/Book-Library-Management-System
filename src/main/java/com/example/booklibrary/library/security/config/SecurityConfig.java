@@ -2,6 +2,7 @@ package com.example.booklibrary.library.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,12 +29,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/v1/auth/**")
                         .permitAll()
+
+                        .requestMatchers("api/v1/reader-cards/getOwnReaderCard").hasAuthority("ROLE_READER")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/authors/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/authors/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/authors/**").hasAuthority("ROLE_LIBRARIAN")
+
+                        .requestMatchers("api/v1/readers/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers("api/v1/reader-cards/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers("api/v1/users/**").hasAuthority("ROLE_LIBRARIAN")
+
                         .requestMatchers("api/v1/readers/loggedReader").permitAll()
                         .requestMatchers("api/v1/reader-cards/searchByUserId/{userId}").permitAll()
-                        .requestMatchers("api/v1/readers/**").permitAll()
-                        .requestMatchers("api/v1/reader-cards/**").permitAll()
-                        .requestMatchers("api/v1/users/**").permitAll()
-                        .requestMatchers("api/v1/authors/**", "api/v1/books/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/authors/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
