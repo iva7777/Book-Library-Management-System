@@ -1,0 +1,27 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Edit Reader Card Information</h2>
+    <form [formGroup]="editReaderCardForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="rentDate">
+                <span class="label-text">Rent Date</span>
+            </label>
+            <input type="date" id="rentDate" formControlName="rentDate" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="returnDate">
+                <span class="label-text">Return Date</span>
+            </label>
+            <input type="date" id="returnDate" formControlName="returnDate" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="readerNames">
+                <span class="label-text">Reader Names</span>
+            </label>
+            <input type="text" id="readerNames" formControlName="readerNames" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-info w-full mb-2">Save Changes</button>
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+        </div>
+    </form>
+</div>

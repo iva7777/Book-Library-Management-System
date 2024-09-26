@@ -1,0 +1,29 @@
+<div class="flex justify-center mt-10">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full max-w-lg shadow-md bg-base-100 p-6 rounded-lg">
+        <h2 class="text-2xl font-bold mb-6 text-center">Welcome Back!</h2>
+
+        <div class="form-control mb-4">
+            <input type="text" formControlName="username" maxlength="20" placeholder="Enter username"
+                class="input input-bordered w-full" />
+            <div *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched"
+                class="text-red-500 text-sm">
+                Username is required.
+            </div>
+        </div>
+
+        <div class="form-control mb-6">
+            <input type="password" formControlName="password" placeholder="Enter password"
+                class="input input-bordered w-full" />
+            <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+                class="text-red-500 text-sm">
+                Password is required.
+            </div>
+        </div>
+
+        <div class="form-control">
+            <button type="submit" class="btn btn-info" [disabled]="loginForm.invalid">Submit</button>
+        </div>
+    </form>
+
+    <app-login-error-modal [visible]="isErrorVisible" (close)="closeErrorModal()"></app-login-error-modal>
+</div>

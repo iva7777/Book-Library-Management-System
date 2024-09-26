@@ -1,0 +1,16 @@
+<div *ngIf="readerCard && !(isLoading$ | async)" class="card w-full max-w-lg mx-auto flex justify-center image-full w-96 shadow-2xl mt-8 bg-base-100">
+    <figure>
+        <img src="assets/images/books-overlay.jpg" alt="Books" />
+    </figure>
+    <div class="card-body flex justify-center">
+        <h2 class="card-title text-2xl font-semibold flex justify-center">{{ readerCard.readerNames }}'s Reader Card</h2>
+        <div class="py-4">
+            <p class="text-lg">
+                <strong>Rent Date: </strong> {{ readerCard.rentDate }}
+            </p>
+            <p class="text-lg">
+                <strong>Return Date: </strong> {{ readerCard.returnDate }}
+            </p>
+        </div>
+    </div>
+</div>

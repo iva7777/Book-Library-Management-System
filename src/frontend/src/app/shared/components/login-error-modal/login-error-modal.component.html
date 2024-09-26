@@ -1,0 +1,9 @@
+<div *ngIf="visible" class="modal modal-open">
+    <div class="modal-box bg-error-content">
+        <h3 class="font-bold text-2xl text-center">Invalid Credentials</h3>
+        <p class="py-4">The username or password you entered is incorrect. Please try again.</p>
+        <div class="modal-action">
+            <button (click)="onClose()" class="btn btn-secondary">Try Again</button>
+        </div>
+    </div>
+</div>

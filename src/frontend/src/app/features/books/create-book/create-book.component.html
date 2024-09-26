@@ -1,0 +1,69 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Add New Book</h2>
+    <form (ngSubmit)="onSubmit()" #bookForm="ngForm" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="title">
+                <span class="label-text">Title</span>
+            </label>
+            <input type="text" id="title" name="title" [(ngModel)]="book.title" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="author">
+                <span class="label-text">Author</span>
+            </label>
+            <input type="text" id="author" name="author" [(ngModel)]="book.authorNames" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="yearOfProduction">
+                <span class="label-text">Year of Production</span>
+            </label>
+            <input type="text" id="yearOfProduction" name="yearOfProduction" [(ngModel)]="book.yearOfProduction" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="genre">
+                <span class="label-text">Genre</span>
+            </label>
+            <input type="text" id="genre" name="genre" [(ngModel)]="book.genre" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="isbn">
+                <span class="label-text">ISBN</span>
+            </label>
+            <input type="text" id="isbn" name="isbn" [(ngModel)]="book.isbn" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="publisher">
+                <span class="label-text">Publisher</span>
+            </label>
+            <input type="text" id="publisher" name="publisher" [(ngModel)]="book.publisher" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="status">
+                <span class="label-text">Status</span>
+            </label>
+            <select id="status" [(ngModel)]="book.status" name="status" class="select select-bordered w-full">
+                <option value="available">available</option>
+                <option value="borrowed">borrowed</option>
+                <option value="discarded">discarded</option>
+            </select>
+        </div>
+        <div class="form-control">
+            <label class="label" for="description">
+                <span class="label-text">Description</span>
+            </label>
+            <input type="textarea" id="description" name="description" [(ngModel)]="book.description"
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary w-full" [disabled]="!bookForm.form.valid">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

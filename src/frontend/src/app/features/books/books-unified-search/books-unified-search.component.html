@@ -1,0 +1,43 @@
+<div class="collapse mt-4">
+    <input type="checkbox" class="peer" />
+    <div class="collapse-title bg-primary-content text-2xl text-center">
+        <span class="text-lg">Search Books</span>
+    </div>
+    <div class="collapse-content">
+        <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form-control">
+            <div class="form-control">
+                <input type="text" formControlName="query" placeholder="Search book"
+                    class="input input-bordered w-full mt-4" />
+            </div>
+            
+            <div class="mt-4 flex justify-center">
+                <button type="submit" class="btn bg-primary-content w-20">Search</button>
+            </div>
+        </form>
+
+        <div *ngIf="searchResults.length > 0" class="mt-4">
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>ISBN</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let book of searchResults">
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.authorNames }}</td>
+                            <td>{{ book.genre }}</td>
+                            <td>{{ book.isbn }}</td>
+                            <td>{{ book.status }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
