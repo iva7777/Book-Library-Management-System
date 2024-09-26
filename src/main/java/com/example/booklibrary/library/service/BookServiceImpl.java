@@ -6,7 +6,14 @@ import com.example.booklibrary.library.model.*;
 import com.example.booklibrary.library.repository.AuthorBookRepository;
 import com.example.booklibrary.library.repository.AuthorRepository;
 import com.example.booklibrary.library.repository.BookRepository;
+import com.example.booklibrary.library.search.BookSearchRequest;
 import com.example.booklibrary.library.service.interfaces.BookService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,18 +29,20 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final AuthorBookRepository authorBookRepository;
     private final BookMapper bookMapper;
+    private final EntityManager entityManager;
 
     @Autowired
     public BookServiceImpl(
             @NotNull BookRepository bookRepository,
             @NotNull AuthorRepository authorRepository,
             @NotNull AuthorBookRepository authorBookRepository,
-            @NotNull BookMapper bookMapper
+            @NotNull BookMapper bookMapper, EntityManager entityManager
     ) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.authorBookRepository = authorBookRepository;
         this.bookMapper = bookMapper;
+        this.entityManager = entityManager;
     }
 
     public List<BookDto> getAllBooks() {
@@ -117,6 +126,40 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new NoSuchElementException("Book with ISBN " + isbn + " and status " + status + " not found."));
 
         return bookMapper.mapEntityToDto(book);
+    }
+
+    public List<BookDto> findBooksByCriteria(BookSearchRequest request) {
+        final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+        Root<Book> root = criteriaQuery.from(Book.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        // Build predicates for each non-null search field
+        if (request.query() != null && !request.query().isBlank()) {
+            String query = "%" + request.query() + "%";
+            Predicate titlePredicate = criteriaBuilder.like(root.get("title"), query);
+            Predicate authorPredicate = criteriaBuilder.like(root.get("title"), query);
+            Predicate statusPredicate = criteriaBuilder.like(root.get("status"), query);
+            Predicate genrePredicate = criteriaBuilder.like(root.get("genre"), query);
+            Predicate isbnPredicate = criteriaBuilder.like(root.get("isbn"), query);
+
+            predicates.add(criteriaBuilder.or(
+                    titlePredicate,
+                    authorPredicate,
+                    statusPredicate,
+                    genrePredicate,
+                    isbnPredicate
+            ));
+        }
+
+        criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+        TypedQuery<Book> query = entityManager.createQuery(criteriaQuery);
+
+        return query.getResultList().stream()
+                .map(bookMapper::mapEntityToDto)
+                .toList();
     }
 
     private void validateAuthors(Book book, String authorNames) {

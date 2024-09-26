@@ -4,6 +4,7 @@ import com.example.booklibrary.library.common.response.ApiResponse;
 import com.example.booklibrary.library.common.util.ResponseHelper;
 import com.example.booklibrary.library.dto.ReaderDto;
 import com.example.booklibrary.library.model.Reader;
+import com.example.booklibrary.library.search.ReaderSearchRequest;
 import com.example.booklibrary.library.service.interfaces.ReaderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class ReaderController {
                 .orElse(ResponseHelper.notFoundResponse("Reader with ID " + id + " not found"));
     }
 
-    @GetMapping("/searchByName/{name}")
+    @PostMapping("/searchByName/{name}")
     public ResponseEntity<?> searchReadersByName(@Valid @PathVariable String name) {
         List<ReaderDto> readers = readerService.searchReaderByName(name);
         if (readers.isEmpty()) {
@@ -47,7 +48,7 @@ public class ReaderController {
         return new ResponseEntity<>(readers, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByPhoneNumber/{phoneNumber}")
+    @PostMapping("/searchByPhoneNumber/{phoneNumber}")
     public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByPhoneNumber(@Valid @PathVariable String phoneNumber) {
         Optional<ReaderDto> readerOptional = readerService.searchReaderByPhoneNumber(phoneNumber);
 
@@ -55,7 +56,7 @@ public class ReaderController {
                 .orElse(ResponseHelper.notFoundResponse("Reader with phone number " + phoneNumber + " not found"));
     }
 
-    @GetMapping("/searchByEmail/{email}")
+    @PostMapping("/searchByEmail/{email}")
     public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByEmail(@Valid @PathVariable String email) {
         Optional<ReaderDto> readerOptional = readerService.searchReaderByEmail(email);
 
@@ -63,12 +64,19 @@ public class ReaderController {
                 .orElse(ResponseHelper.notFoundResponse("Reader with email " + email + " not found"));
     }
 
-    @GetMapping("/searchByUserId/{userId}")
+    @PostMapping("/searchByUserId/{userId}")
     public ResponseEntity<ApiResponse<ReaderDto>> searchReaderByUserId(@Valid @PathVariable int userId) {
         Optional<ReaderDto> readerOptional = readerService.getReaderByUserId(userId);
 
         return readerOptional.map(ResponseHelper::successResponse)
                 .orElse(ResponseHelper.notFoundResponse("Reader with userId " + userId + " not found"));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<ReaderDto>> searchReader(@RequestBody ReaderSearchRequest request) {
+        List<ReaderDto> readerDtoList = readerService.findReadersByCriteria(request);
+
+        return ResponseEntity.ok(readerDtoList);
     }
 
     @GetMapping("/loggedReader")
