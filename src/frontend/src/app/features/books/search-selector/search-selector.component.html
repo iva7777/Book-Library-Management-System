@@ -1,0 +1,12 @@
+<div class="form-control w-full max-w-xs m-4">
+    <label class="label">
+        <span class="label-text">Select Search Type</span>
+    </label>
+    <div class="relative">
+        <select (change)="onSearchTypeChange($event)" class="select select-bordered w-full">
+            <option value="" disabled selected>Select a search type</option>
+            <option value="author">Search by Author Name</option>
+            <option value="genre">Search by Genre</option>
+        </select>
+    </div>
+</div>

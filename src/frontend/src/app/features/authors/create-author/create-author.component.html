@@ -1,0 +1,31 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Add New Author</h2>
+    <form (ngSubmit)="onSubmit()" #authorForm="ngForm" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="firstName">
+                <span class="label-text">First Name</span>
+            </label>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="author.firstName" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="lastName">
+                <span class="label-text">Last Name</span>
+            </label>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="author.lastName" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="bio">
+                <span class="label-text">Biography</span>
+            </label>
+            <input type="textarea" id="bio" name="bio" [(ngModel)]="author.bio"
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary w-full" [disabled]="!authorForm.form.valid">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

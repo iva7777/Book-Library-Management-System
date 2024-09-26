@@ -1,0 +1,22 @@
+<div class="w-full max-w-4xl mx-auto">
+    <input type="checkbox" id="app-user-details-modal" class="modal-toggle" [checked]="visible" (change)="close()" />
+    <label for="app-user-details-modal" class="modal cursor-pointer">
+        <label class="modal-box relative w-full max-w-2xl p-4 bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Background image for modal with overlay -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-30"
+                style="background-image: url('assets/images/users-overlay.jpg');"></div>
+            <!-- Overlay to darken the image for better text readability -->
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+
+            <div class="relative z-10 text-white">
+                <h2 class="text-2xl font-bold text-center">User</h2>
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Password:</strong> {{ user.password }}</p>
+                <p><strong>Role:</strong> {{ user.role | uppercase}}</p>
+                <div class="modal-action">
+                    <label for="app-user-details-modal" class="btn btn-accent">Close</label>
+                </div>
+            </div>
+        </label>
+    </label>
+</div>

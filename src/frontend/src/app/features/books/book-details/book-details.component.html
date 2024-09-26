@@ -1,0 +1,25 @@
+<input type="checkbox" id="book-details-modal" class="modal-toggle" [checked]="visible" (change)="close()" />
+<label for="book-details-modal" class="modal cursor-pointer">
+    <label class="modal-box relative p-8 bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Background image for modal with overlay -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-30"
+            style="background-image: url('assets/images/books-overlay.jpg');"></div>
+        <!-- Overlay to darken the image for better text readability -->
+        <div class="absolute inset-0 bg-black opacity-60"></div>
+
+        <div class="relative z-10 text-white">
+            <h2 class="text-2xl font-bold text-center">{{ book.title | capitalize}}</h2>
+            <p><strong>Author:</strong> {{ book.authorNames | capitalize}}</p>
+            <p><strong>Genre:</strong> {{ book.genre | capitalize}}</p>
+            <p><strong>Year of Production:</strong> {{ book.yearOfProduction }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p><strong>Publisher:</strong> {{ book.publisher | capitalize}}</p>
+            <p><strong>Status:</strong> {{ book.status | uppercase}}</p>
+            <p><strong>Description:</strong> {{ book.description }}</p>
+
+            <div class="modal-action">
+                <label for="book-details-modal" class="btn btn-accent">Close</label>
+            </div>
+        </div>
+    </label>
+</label>

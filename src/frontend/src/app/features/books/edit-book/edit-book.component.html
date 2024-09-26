@@ -1,0 +1,25 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Edit Book Status</h2>
+    <form [formGroup]="editBookForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="title">
+                <span class="label-text">Title</span>
+            </label>
+            <input type="text" id="title" formControlName="title" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="status">
+                <span class="label-text">Status</span>
+            </label>
+            <select id="status" formControlName="status" class="select select-bordered w-full">
+                <option value="available">available</option>
+                <option value="borrowed">borrowed</option>
+                <option value="discarded">discarded</option>
+            </select>
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-info w-full mb-2">Save Changes</button>
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+        </div>
+    </form>
+</div>

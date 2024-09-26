@@ -1,0 +1,10 @@
+<div *ngIf="showDeleteModal" class="modal modal-open">
+    <div class="modal-box">
+        <h2 class="text-2xl font-bold text-center mb-2">Confirm Delete</h2>
+        <p>Are you sure you want to delete the book titled "{{ selectedBook.title }}"?</p>
+        <div class="modal-action">
+            <button (click)="onConfirm()" class="btn bg-secondary">Yes, Delete</button>
+            <button (click)="onCancel()" class="btn">Cancel</button>
+        </div>
+    </div>
+</div>

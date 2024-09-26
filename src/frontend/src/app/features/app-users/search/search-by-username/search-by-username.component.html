@@ -1,0 +1,15 @@
+<div class="search-form-container">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="p-4">
+        <div class="flex items-center space-x-2">
+            <div>
+                <select formControlName="role" class="select select-bordered">
+                    <option value="">Role</option>
+                    <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-neutral">Filter</button>
+            </div>
+        </div>
+    </form>
+</div>

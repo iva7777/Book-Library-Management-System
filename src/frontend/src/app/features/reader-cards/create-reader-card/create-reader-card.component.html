@@ -1,0 +1,38 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Add New Reader Card</h2>
+    <form (ngSubmit)="onSubmit()" #readerCardForm="ngForm" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="rentDate">
+                <span class="label-text">Rent Date</span>
+            </label>
+            <input type="date" id="rentDate" name="rentDate" [(ngModel)]="readerCard.rentDate" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="returnDate">
+                <span class="label-text">Return Date</span>
+            </label>
+            <input type="date" id="returnDate" name="returnDate" [(ngModel)]="readerCard.returnDate" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="readerId">
+                <span class="label-text">Reader ID</span>
+            </label>
+            <input type="number" id="readerId" name="readerId" [(ngModel)]="readerCard.readerId" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="readerNames">
+                <span class="label-text">Reader Names</span>
+            </label>
+            <input type="text" id="readerNames" name="readerNames" [(ngModel)]="readerCard.readerNames" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary w-full" [disabled]="!readerCardForm.valid">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,39 @@
+<div class="collapse mt-4">
+    <input type="checkbox" class="peer" />
+    <div class="collapse-title bg-primary-content text-2xl text-center">
+        <span class="text-lg">Search Readers</span>
+    </div>
+    <div class="collapse-content">
+        <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form-control">
+            <div class="form-control">
+                <input type="text" formControlName="query" placeholder="Search reader"
+                    class="input input-bordered w-full mt-4" />
+            </div>
+
+            <div class="mt-4 flex justify-center">
+                <button type="submit" class="btn bg-primary-content w-20">Search</button>
+            </div>
+        </form>
+
+        <div *ngIf="searchResults.length > 0" class="mt-4">
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let reader of searchResults">
+                            <td>{{ reader.firstName }}</td>
+                            <td>{{ reader.lastName }}</td>
+                            <td>{{ reader.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<app-search-by-username (searchResults)="updateUserList($event)"></app-search-by-username>
+
+<div class="overflow-x-auto" *ngIf="!(isLoading$ | async)">
+    <h1 class="text-2xl text-center font-bold mb-4">Users</h1>
+
+    <table class="table w-full justify-center">
+        <thead class="bg-neutral-content hover:bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th *ngIf="isLibrarian">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let user of paginatedItems" class="cursor-pointer hover:bg-neutral-content">
+                <td>{{ user.id }}</td>
+                <td (click)="openUserDetails(user)">{{ user.username }}</td>
+                <td>{{ user.role | uppercase}}</td>
+                <td *ngIf="isLibrarian">
+                    <a [routerLink]="['/users/edit', user.id]" class="btn btn-sm btn-accent">Edit</a>
+                    <button (click)="openDeleteModal(user)" class="btn btn-sm btn-error ml-2">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-app-user-details *ngIf="selectedUser" [user]="selectedUser" [visible]="isModalOpen"
+    (onClose)="closeUserDetails()"></app-app-user-details>
+
+<app-delete-user-confirmation [selectedUser]="selectedUser" [showDeleteModal]="showDeleteModal"
+    (confirmDelete)="confirmDelete()" (cancelDelete)="closeDeleteModal()"></app-delete-user-confirmation>
+
+<app-pagination [items]="users" (paginatedItemsChange)="onPaginatedItemsChange($event)"></app-pagination>
