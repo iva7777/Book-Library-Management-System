@@ -1,0 +1,22 @@
+<nav class="navbar bg-accent shadow-lg">
+    <div class="navbar-start">
+        <a routerLink="/" class="btn btn-ghost normal-case text-xl bg-accent font-serif"><img src="assets/images/libra-img.png" alt="libra-icon">Libra</a>
+    </div>
+
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+            <li *ngIf="isLibrarian"><a routerLink="/users">Users</a></li>
+            <li><a routerLink="/books">Books</a></li>
+            <li><a routerLink="/authors">Authors</a></li>
+            <li *ngIf="isReader"><a routerLink="/my-reader-card">My Reader Card</a></li>
+            <li *ngIf="isLibrarian"><a routerLink="/reader-cards">Reader Cards</a></li>
+            <li *ngIf="isLibrarian"><a routerLink="/readers">Readers</a></li>
+        </ul>
+    </div>
+
+    <div class="navbar-end">
+        <a *ngIf="!isLoggedIn" class="btn bg-accent m-2" routerLink="/auth/login">Login</a>
+        <a *ngIf="isLoggedIn" (click)="logout()" class="btn">Logout</a>
+        <a *ngIf="!isLoggedIn" class="btn bg-accent" routerLink="/auth/register">Register</a>
+    </div>
+</nav>

@@ -1,0 +1,27 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Edit Author Information</h2>
+    <form [formGroup]="editAuthorForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="firstName">
+                <span class="label-text">First Name</span>
+            </label>
+            <input type="text" id="firstName" formControlName="firstName" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="lastName">
+                <span class="label-text">Last Name</span>
+            </label>
+            <input type="text" id="lastName" formControlName="lastName" class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="bio">
+                <span class="label-text">Biography</span>
+            </label>
+            <textarea id="bio" formControlName="bio" class="textarea textarea-bordered w-full"></textarea>
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-info w-full mb-2">Save Changes</button>
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+        </div>
+    </form>
+</div>

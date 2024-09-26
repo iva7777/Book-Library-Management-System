@@ -1,0 +1,23 @@
+<input type="checkbox" id="reader-details-modal" class="modal-toggle" [checked]="visible" (change)="close()" />
+<label for="reader-details-modal" class="modal cursor-pointer">
+    <label class="modal-box relative p-8 bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Background image for modal with overlay -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-30"
+            style="background-image: url('assets/images/readers-overlay.jpg');"></div>
+        <!-- Overlay to darken the image for better text readability -->
+        <div class="absolute inset-0 bg-black opacity-60"></div>
+
+        <div class="relative z-10 text-white">
+            <h2 class="text-2xl font-bold text-center">Reader</h2>
+            <p><strong>First Name:</strong> {{ reader.firstName | capitalize}}</p>
+            <p><strong>Last Name:</strong> {{ reader.lastName | capitalize}}</p>
+            <p><strong>Email:</strong> {{ reader.email }}</p>
+            <p><strong>Phone Number:</strong> {{ reader.phone }}</p>
+            <p><strong>Address:</strong> {{ reader.address }}</p>
+
+            <div class="modal-action">
+                <label for="reader-details-modal" class="btn btn-accent">Close</label>
+            </div>
+        </div>
+    </label>
+</label>

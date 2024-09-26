@@ -1,0 +1,52 @@
+<div class="max-w-lg mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Add New Author</h2>
+    <form (ngSubmit)="onSubmit()" #readerForm="ngForm" class="space-y-4">
+        <div class="form-control">
+            <label class="label" for="firstName">
+                <span class="label-text">First Name</span>
+            </label>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="reader.firstName" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="lastName">
+                <span class="label-text">Last Name</span>
+            </label>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="reader.lastName" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="phone">
+                <span class="label-text">Phone Number</span>
+            </label>
+            <input type="tel" id="phone" name="phone" [(ngModel)]="reader.phone" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="address">
+                <span class="label-text">Address</span>
+            </label>
+            <input type="text" id="address" name="address" [(ngModel)]="reader.address" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="email">
+                <span class="label-text">Email</span>
+            </label>
+            <input type="email" id="email" name="email" [(ngModel)]="reader.email" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control">
+            <label class="label" for="userId">
+                <span class="label-text">User ID</span>
+            </label>
+            <input type="number" id="userId" name="userId" [(ngModel)]="reader.userId" required
+                class="input input-bordered w-full" />
+        </div>
+        <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary w-full" [disabled]="!readerForm.form.valid">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

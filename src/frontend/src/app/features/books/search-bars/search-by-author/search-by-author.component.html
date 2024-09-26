@@ -1,0 +1,32 @@
+<div class="form-control">
+    <input [formControl]="authorControl" placeholder="Search by Author"
+        class="input input-bordered w-full max-w-xs m-4" />
+</div>
+
+<div *ngIf="books.length > 0">
+    <h2 class="text-xl text-center font-bold m-10">Search Results</h2>
+    <table class="table w-full">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>ISBN</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let book of books">
+                <td>{{ book.title }}</td>
+                <td>{{ book.authorNames }}</td>
+                <td>{{ book.genre }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="noResults">
+    <p>No books found for the given author.</p>
+</div>

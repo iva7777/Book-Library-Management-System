@@ -1,0 +1,12 @@
+<div class="btn-group m-4">
+    <button class="btn btn-sm btn-secondary" [disabled]="currentPage === 1" (click)="goToPreviousPage()">
+        « Prev
+    </button>
+    <button class="btn btn-sm btn-secondary m-1" *ngFor="let page of totalPagesArray()" (click)="goToPage(page)"
+        [class.btn-active]="currentPage === page">
+        {{ page }}
+    </button>
+    <button class="btn btn-sm btn-secondary" [disabled]="currentPage === totalPages()" (click)="goToNextPage()">
+        Next »
+    </button>
+</div>
