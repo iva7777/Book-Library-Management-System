@@ -39,7 +39,7 @@ public class AppUserController {
                 .orElse(ResponseHelper.notFoundResponse("User with ID " + id + " not found"));
     }
 
-    @GetMapping("/searchByUsername/{username}")
+    @PostMapping("/searchByUsername/{username}")
     public ResponseEntity<ApiResponse<AppUserDto>> searchUsersByUsername(@Valid @PathVariable String username) {
         Optional<AppUserDto> userOptional = appUserService.searchUserByUsername(username);
 
@@ -47,7 +47,7 @@ public class AppUserController {
                 .orElse(ResponseHelper.notFoundResponse("User with username " + username + " not found"));
     }
 
-    @GetMapping("/searchByRole/{role}")
+    @PostMapping("/searchByRole/{role}")
     public ResponseEntity<?> searchUsersByRole(@Valid @PathVariable Role role) {
         List<AppUserDto> users = appUserService.searchUsersByRole(role);
         if (users.isEmpty()) {

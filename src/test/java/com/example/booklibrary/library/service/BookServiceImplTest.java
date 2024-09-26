@@ -7,6 +7,7 @@ import com.example.booklibrary.library.model.BookStatus;
 import com.example.booklibrary.library.repository.AuthorBookRepository;
 import com.example.booklibrary.library.repository.AuthorRepository;
 import com.example.booklibrary.library.repository.BookRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,8 @@ class BookServiceImplTest {
     @Mock
     private AuthorBookRepository authorBookRepository;
 
+    private EntityManager entityManager;
+
     @InjectMocks
     private BookMapper bookMapper;
     @InjectMocks
@@ -45,7 +48,7 @@ class BookServiceImplTest {
     @BeforeEach
     void setUp() {
         bookMapper = new BookMapper();
-        bookService = new BookServiceImpl(bookRepository, authorRepository, authorBookRepository, bookMapper);
+        bookService = new BookServiceImpl(bookRepository, authorRepository, authorBookRepository, bookMapper, entityManager);
 
         book = new Book();
         book.setId(1);

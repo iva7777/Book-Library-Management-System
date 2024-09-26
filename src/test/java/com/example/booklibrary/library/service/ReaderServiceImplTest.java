@@ -9,6 +9,7 @@ import com.example.booklibrary.library.model.ReaderCard;
 import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderRepository;
 import com.example.booklibrary.library.security.AuthenticationService;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class ReaderServiceImplTest {
     private AppUserRepository appUserRepository;
 
     private ReaderMapper readerMapper;
+    private EntityManager entityManager;
 
     @InjectMocks
     private ReaderServiceImpl readerService;
@@ -53,7 +55,7 @@ class ReaderServiceImplTest {
     @BeforeEach
     void setUp() {
         readerMapper = new ReaderMapper();
-        readerService = new ReaderServiceImpl(readerRepository, appUserRepository, authenticationService, readerMapper);
+        readerService = new ReaderServiceImpl(readerRepository, appUserRepository, authenticationService, readerMapper, entityManager);
 
         Calendar calendarRent = Calendar.getInstance();
         calendarRent.set(2024, Calendar.AUGUST, 15);

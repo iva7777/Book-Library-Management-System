@@ -32,7 +32,7 @@ public class SecurityConfig {
 
                         .requestMatchers("api/v1/reader-cards/getOwnReaderCard").hasAuthority("ROLE_READER")
 
-                        .requestMatchers(HttpMethod.POST, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
 
@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/authors/**").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/authors/**").hasAuthority("ROLE_LIBRARIAN")
 
+                        .requestMatchers(HttpMethod.POST, "api/v1/readers/search").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers("api/v1/readers/**").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers("api/v1/reader-cards/**").hasAuthority("ROLE_LIBRARIAN")
                         .requestMatchers("api/v1/users/**").hasAuthority("ROLE_LIBRARIAN")
@@ -47,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/readers/loggedReader").permitAll()
                         .requestMatchers("api/v1/reader-cards/searchByUserId/{userId}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/authors/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/books/search").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

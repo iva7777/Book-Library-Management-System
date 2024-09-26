@@ -29,7 +29,7 @@ public class AuthorController {
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByBookTitle/{title}")
+    @PostMapping("/searchByBookTitle/{title}")
     public ResponseEntity<?> searchAuthorsByBookTitle(@Valid @PathVariable String title) {
         List<AuthorDto> authors = authorService.searchAuthorByBook(title);
 
