@@ -5,6 +5,7 @@ import com.example.booklibrary.library.common.util.ResponseHelper;
 import com.example.booklibrary.library.dto.BookDto;
 import com.example.booklibrary.library.model.Book;
 import com.example.booklibrary.library.model.BookStatus;
+import com.example.booklibrary.library.search.BookSearchRequest;
 import com.example.booklibrary.library.service.interfaces.BookService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByBookTitle/{title}")
+    @PostMapping("/searchByBookTitle/{title}")
     public ResponseEntity<?> searchBookByTitle(@Valid @PathVariable String title) {
         List<BookDto> books = bookService.searchBooksByTitle(title);
         if (books.isEmpty()) {
@@ -58,7 +59,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByAuthorName/{name}")
+    @PostMapping("/searchByAuthorName/{name}")
     public ResponseEntity<?> searchBookByAuthorName(@Valid @PathVariable String name) {
         List<BookDto> books = bookService.searchBooksByAuthorName(name);
         if (books.isEmpty()) {
@@ -68,7 +69,7 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByGenre/{genre}")
+    @PostMapping("/searchByGenre/{genre}")
     public ResponseEntity<?> searchBookByGenre(@Valid @PathVariable String genre) {
         List<BookDto> books = bookService.searchBooksByGenre(genre);
         if (books.isEmpty()) {
@@ -78,10 +79,17 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/searchByIsbnAndStatus/{isbn}/{status}")
+    @PostMapping("/searchByIsbnAndStatus/{isbn}/{status}")
     public ResponseEntity<BookDto> searchBookByIsbnAndStatus(@Valid @PathVariable String isbn, @Valid @PathVariable BookStatus status) {
         BookDto book = bookService.searchBookByIsbnAndStatus(isbn, status);
         return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<BookDto>> searchUser(@RequestBody BookSearchRequest request) {
+        List<BookDto> bookDtoList = bookService.findBooksByCriteria(request);
+
+        return ResponseEntity.ok(bookDtoList);
     }
 
     @PostMapping

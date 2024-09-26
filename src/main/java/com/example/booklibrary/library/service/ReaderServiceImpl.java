@@ -6,12 +6,20 @@ import com.example.booklibrary.library.model.AppUser;
 import com.example.booklibrary.library.model.Reader;
 import com.example.booklibrary.library.repository.AppUserRepository;
 import com.example.booklibrary.library.repository.ReaderRepository;
+import com.example.booklibrary.library.search.ReaderSearchRequest;
 import com.example.booklibrary.library.security.AuthenticationService;
 import com.example.booklibrary.library.service.interfaces.ReaderService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +29,15 @@ public class ReaderServiceImpl implements ReaderService {
     private final AppUserRepository appUserRepository;
     private final AuthenticationService authenticationService;
     private final ReaderMapper readerMapper;
+    private final EntityManager entityManager;
 
     @Autowired
-    public ReaderServiceImpl(@NotNull ReaderRepository readerRepository, @NotNull AppUserRepository appUserRepository, @NotNull AuthenticationService authenticationService, @NotNull ReaderMapper readerMapper) {
+    public ReaderServiceImpl(@NotNull ReaderRepository readerRepository, @NotNull AppUserRepository appUserRepository, @NotNull AuthenticationService authenticationService, @NotNull ReaderMapper readerMapper, EntityManager entityManager) {
         this.readerRepository = readerRepository;
         this.appUserRepository = appUserRepository;
         this.authenticationService = authenticationService;
         this.readerMapper = readerMapper;
+        this.entityManager = entityManager;
     }
 
     public List<ReaderDto> getAllReaders() {
@@ -100,5 +110,37 @@ public class ReaderServiceImpl implements ReaderService {
         Optional<Reader> optionalReader = readerRepository.findReaderByEmail(email);
 
         return optionalReader.map(readerMapper::mapEntityToDto);
+    }
+
+    public List<ReaderDto> findReadersByCriteria(ReaderSearchRequest request) {
+        final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Reader> criteriaQuery = criteriaBuilder.createQuery(Reader.class);
+        Root<Reader> root = criteriaQuery.from(Reader.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        // Build predicates for each non-null search field
+        if (request.query() != null && !request.query().isBlank()) {
+            String query = "%" + request.query() + "%";
+            Predicate firstNamePredicate = criteriaBuilder.like(root.get("firstName"), query);
+            Predicate lastNamePredicate = criteriaBuilder.like(root.get("lastName"), query);
+            Predicate phonePredicate = criteriaBuilder.like(root.get("phone"), query);
+            Predicate emailPredicate = criteriaBuilder.like(root.get("email"), query);
+
+            predicates.add(criteriaBuilder.or(
+                    firstNamePredicate,
+                    lastNamePredicate,
+                    phonePredicate,
+                    emailPredicate
+            ));
+        }
+
+        criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+        TypedQuery<Reader> query = entityManager.createQuery(criteriaQuery);
+
+        return query.getResultList().stream()
+                .map(readerMapper::mapEntityToDto)
+                .toList();
     }
 }

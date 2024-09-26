@@ -2,6 +2,7 @@ package com.example.booklibrary.library.service.interfaces;
 
 import com.example.booklibrary.library.dto.ReaderDto;
 import com.example.booklibrary.library.model.Reader;
+import com.example.booklibrary.library.search.ReaderSearchRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,4 +27,6 @@ public interface ReaderService {
     Optional<ReaderDto> searchReaderByPhoneNumber(String phone);
 
     Optional<ReaderDto> searchReaderByEmail(String email);
+
+    List<ReaderDto> findReadersByCriteria(ReaderSearchRequest request);
 }
